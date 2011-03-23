@@ -1,0 +1,5 @@
+require 'openssl'
+require 'base64'
+require 'gibberish/aes'
+require 'gibberish/digest'
+require 'gibberish/hmac'
