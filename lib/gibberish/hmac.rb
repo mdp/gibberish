@@ -15,7 +15,7 @@ module Gibberish
     end
   end
 
-  def HMAC(key, data, opts={})
-    Giberish::HMAC.digest(key, data, opts)
+  def self.HMAC(key, data, opts={})
+    Gibberish::HMAC.digest(key, data, opts)
   end
 end

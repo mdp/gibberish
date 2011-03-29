@@ -9,47 +9,40 @@ module Gibberish
     end
 
     def encrypt(data, opts={})
-      @cipher.encrypt
-      setup_cipher
-      e = c.update(data)
-      e << c.final
-      e = "salted__#{@salt}#{e}" #OpenSSL compatible
+      salt = generate_salt
+      setup_cipher(:encrypt, salt)
+      e = cipher.update(data) + cipher.final
+      e = "Salted__#{salt}#{e}" #OpenSSL compatible
       if opts[:binary]
         e
       else
         Base64.encode64(e)
       end
     end
-    alias :enc, :encrypt
-    alias :e, :encrypt
+    alias :enc :encrypt
+    alias :e :encrypt
 
     def decrypt(data, opts={})
-      s = data[8,8]
-      data = data[16,data.length-16]
-      @cipher.decrypt
-      setup_cipher(s)
+      data = Base64.decode64(data)
+      salt = data[8..15]
+      data = data[16..-1]
+      setup_cipher(:decrypt, salt)
+      cipher.update(data) + cipher.final
     end
-    alias :dec, :decrypt
-    alias :d, :decrypt
+    alias :dec :decrypt
+    alias :d :decrypt
 
     private
 
-    def setup_cipher(salt = nil)
-      rounds = (size/128.0).ceil + 1
-      md5_hash = []
-      unless salt
-        salt = ''
-        8.times {salt += rand(255).chr}
-      end
-      ps = password + salt
-      result = md5_hash[0] = Gibberish::MD5(ps, :binary => true)
-      1.upto(rounds) do |i|
-        md5_hash[i] = Gibberish::MD5(md5_hash[i-1] + ps, :binary => true)
-        result = result + md5_hash[i]
-      end
-      @cipher.key = result[0, (size/8)]
-      @cipher.iv = result[(size/8), 16]
-      @salt = salt
+    def generate_salt
+      s = ''
+      8.times {s << rand(255).chr}
+      s
+    end
+
+    def setup_cipher(method, salt)
+      cipher.send(method)
+      cipher.pkcs5_keyivgen(password, salt, 1)
     end
   end
 end
