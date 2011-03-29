@@ -1,5 +1,21 @@
 module Gibberish
   class RSA
+    # This wraps the OpenSSL RSA functions
+    # Simply instantiate with a public key or private key
+    #
+    #     cipher = Gibberish::RSA.new(private_key)
+    #     enc = cipher.encrypt(data)
+    #     dec = cipher.decrypt(enc)
+    #
+    #     cipher = Gibberish::RSA(public_key)
+    #     cipher.decrypt(enc)
+    #
+    #
+    # You can also generate a keypair using Gibberish::RSA.generate_keypair
+    #
+    #     kp = Gibberish::RSA.generate_keypair(4096)
+    #     kp.public_key #=> Outputs a Base64 encoded public key
+    #     kp.private_key #=> Outputs the Base64 pem
 
     class KeyPair
       def self.generate(bits=2048)
@@ -8,6 +24,11 @@ module Gibberish
 
       def initialize(key)
         @key = key
+        @cipher =  OpenSSL::Cipher::Cipher.new('aes-256-cbc')
+      end
+
+      def passphrase=(p)
+        @passphrase = p
       end
 
       def public_key
@@ -15,7 +36,11 @@ module Gibberish
       end
 
       def private_key
-        @key.to_pem
+        if @passphrase
+          @key.to_pem(@cipher, @passphrase)
+        else
+          @key.to_pem
+        end
       end
 
     end
@@ -26,13 +51,12 @@ module Gibberish
 
     # Expects a public key at the minumum
     #
-    def initialize(public_key, private_key=nil)
-      @pub_key = OpenSSL::PKey::RSA.new(public_key)
-      @priv_key = OpenSSL::PKey::RSA.new(private_key)
+    def initialize(key, passphrase=nil)
+      @key = OpenSSL::PKey::RSA.new(key, passphrase)
     end
 
     def encrypt(data, opts={})
-      enc = @pub_key.public_encrypt(data)
+      enc = @key.public_encrypt(data)
       if opts[:binary]
         enc
       else
@@ -41,11 +65,11 @@ module Gibberish
     end
 
     def decrypt(data, opts={})
-      raise "No private key set!" unless @priv_key
+      raise "No private key set!" unless @key.private?
       unless opts[:binary]
         data = Base64.decode64(data)
       end
-      @priv_key.private_decrypt(data)
+      @key.private_decrypt(data)
     end
   end
 
