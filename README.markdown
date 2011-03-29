@@ -1,5 +1,8 @@
-# Gibberish
-### Stop looking up encryption code snippets!
+# Gibberish - Stop looking up encryption code snippets!
+
+Gibberish is an opinionated cryptography library for Ruby. It's objective is to make it easy to use
+encryption in Ruby without complicated setup. It defaults to the best encryption practices while remaining
+compatible with OpenSSL on the command line.
 
 ## Digests
 
@@ -14,6 +17,8 @@
 
 ## AES
 
+Defaults to 256 bit CBC encryption
+
     cipher = Gibberish::AES.new("p4ssw0rd")
     cipher.enc("Some top secret data")
     #=> U2FsdGVkX187oKRbgDkUcMKaFfB5RsXQj/X4mc8X3lsUVgwb4+S55LQo6f6N\nIDMX
@@ -27,6 +32,8 @@ Gibberish AES is fully compatible with default OpenSSL on the command line
     openssl enc -d -aes-256-cbc -a -k p4ssw0rd
 
 ## HMAC
+
+Defaults to 256 bit digest
 
     Gibberish::HMAC("key", "some data")
     #=> 521677c580722c5c52fa15d978e8656341c4f3c5
