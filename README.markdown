@@ -1,8 +1,7 @@
 # Gibberish - Stop looking up encryption code snippets!
 
-Gibberish is an opinionated cryptography library for Ruby. It's objective is to make it easy to use
-encryption in Ruby without complicated setup. It defaults to the best encryption practices while remaining
-compatible with OpenSSL on the command line.
+Gibberish is an opinionated cryptography library for Ruby. Its objective is easy to use
+encryption in Ruby while remaining secure.
 
 ## Digests
 
