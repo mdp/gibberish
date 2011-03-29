@@ -48,8 +48,9 @@ Defaults to 256 bit digest
 ## RSA
 
     k = Gibberish::RSA.generate_keypair(1024)
-    cipher = Gibberish::RSA.new(k.public_key, k.private_key)
+    cipher = Gibberish::RSA.new(k.public_key)
     enc = cipher.encrypt("Some data")
     # Defaults to Base64 output
     #=> "JKm98wKyJljqmpx7kP8ZsdeXiShllEMcRHVnjUjc4ecyYK/doKAkVTLho1Gp\ng697qrljyClF0AcIH+XZmeF/TrqYUuCEUyhOD6OL1bs5dn8vFQefS5KdaC5Y\ndLADvh3mSfE/w/gs4vaf/OtbZNBeSl6ROCZasWTfRewp4n1RDmE=\n"
+    cipher = Gibberish::RSA.new(k.private_key)
     dec = cipher.decrypt(enc)
