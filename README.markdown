@@ -3,6 +3,14 @@
 Gibberish is an opinionated cryptography library for Ruby. Its objective is easy to use
 encryption in Ruby while remaining secure.
 
+## Requirements
+
+Ruby compiled with OpenSSL support
+
+## Installation
+
+    gem install gibberish
+
 ## Digests
 
     Gibberish::MD5("somedata")
