@@ -1,22 +1,19 @@
 # Gibberish - Encryption in Ruby made simple
 
 ### What
-
-Gibberish is an opinionated cryptography library for Ruby. Its objective is easy to use
-encryption in Ruby while remaining secure.
+Gibberish is an opinionated cryptography library for Ruby. Its objective is easy but secure
+encryption in Ruby.
 
 ### Why
-
 While OpenSSL is an extremely capable encryption library, it lacks a terse and clean
 interface in Ruby.
 
 ### Goals
-
-- This library will also remain easily iteroperable with the OpenSSL command
+- This library should remain easily iteroperable with the OpenSSL command
 line interface. Each function will include documentation on how to perform
 the same routine via the command line with OpenSSL
 
-- It should default to a reasonably secure setting, e.g. 256-bit AES, or SHA1 for HMAC
+- It should default to a reasonably secure setting, e.g. 256-bit AES, or SHA1 for HMAC  
 But it should allow the user to specify a stronger setting, within reason.
 
 - Procedures should be well tested and be compatible with Ruby 1.8.7 and 1.9
