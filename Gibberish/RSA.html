@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Class: Gibberish::RSA</title>
+<link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '..';
+  if (relpath != '') relpath += '/';
+</script>
+<script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (R)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../Gibberish.html" title="Gibberish (module)">Gibberish</a></span></span>
+     &raquo; 
+    <span class="title">RSA</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  <a id="class_list_link" href="#">Class List</a>
+  <a id="method_list_link" href="#">Method List</a>
+  <a id ="file_list_link" href="#">File List</a>
+</div>
+
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Gibberish::RSA
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Gibberish::RSA</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/gibberish/rsa.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>This wraps the OpenSSL RSA functions
+Simply instantiate with a public key or private key</p>
+
+<pre class="code"><span class='id cipher'>cipher</span> <span class='op'>=</span> <span class='const'>Gibberish</span><span class='op'>::</span><span class='const'>RSA</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id private_key'>private_key</span><span class='rparen'>)</span>
+<span class='id enc'>enc</span> <span class='op'>=</span> <span class='id cipher'>cipher</span><span class='period'>.</span><span class='id encrypt'>encrypt</span><span class='lparen'>(</span><span class='id data'>data</span><span class='rparen'>)</span>
+<span class='id dec'>dec</span> <span class='op'>=</span> <span class='id cipher'>cipher</span><span class='period'>.</span><span class='id decrypt'>decrypt</span><span class='lparen'>(</span><span class='id enc'>enc</span><span class='rparen'>)</span>
+
+<span class='id cipher'>cipher</span> <span class='op'>=</span> <span class='const'>Gibberish</span><span class='op'>::</span><span class='const'>RSA</span><span class='lparen'>(</span><span class='id public_key'>public_key</span><span class='rparen'>)</span>
+<span class='id cipher'>cipher</span><span class='period'>.</span><span class='id decrypt'>decrypt</span><span class='lparen'>(</span><span class='id enc'>enc</span><span class='rparen'>)</span>
+</pre>
+
+<p>You can also generate a keypair using Gibberish::RSA.generate_keypair</p>
+
+<pre class="code"><span class='id kp'>kp</span> <span class='op'>=</span> <span class='const'>Gibberish</span><span class='op'>::</span><span class='const'>RSA</span><span class='period'>.</span><span class='id generate_keypair'>generate_keypair</span><span class='lparen'>(</span><span class='int'>4096</span><span class='rparen'>)</span>
+<span class='id kp'>kp</span><span class='period'>.</span><span class='id public_key'>public_key</span> <span class='comment'>#=&gt; Outputs a Base64 encoded public key
+</span><span class='id kp'>kp</span><span class='period'>.</span><span class='id private_key'>private_key</span> <span class='comment'>#=&gt; Outputs the Base64 pem
+</span></pre>
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+   
+    
+   
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="RSA/KeyPair.html" title="Gibberish::RSA::KeyPair (class)">KeyPair</a></span>
+    
+  
+</p>
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#generate_keypair-class_method" title="generate_keypair (class method)">+ (Object) <strong>generate_keypair</strong>(bits = 2048) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#decrypt-instance_method" title="#decrypt (instance method)">- (Object) <strong>decrypt</strong>(data, opts = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#encrypt-instance_method" title="#encrypt (instance method)">- (Object) <strong>encrypt</strong>(data, opts = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (RSA) <strong>initialize</strong>(key, passphrase = nil) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Expects a public key at the minumum.</p></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Gibberish::RSA (class)">RSA</a></span></tt>) <strong>initialize</strong>(key, passphrase = nil) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>Expects a public key at the minumum</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/gibberish/rsa.rb', line 55</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id key'>key</span><span class='comma'>,</span> <span class='id passphrase'>passphrase</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='ivar'>@key</span> <span class='op'>=</span> <span class='const'>OpenSSL</span><span class='op'>::</span><span class='const'>PKey</span><span class='op'>::</span><span class='const'>RSA</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id key'>key</span><span class='comma'>,</span> <span class='id passphrase'>passphrase</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="generate_keypair-class_method">
+  
+    + (<tt>Object</tt>) <strong>generate_keypair</strong>(bits = 2048) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+49
+50
+51</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/gibberish/rsa.rb', line 49</span>
+
+<span class='kw'>def</span> <span class='const'>RSA</span><span class='period'>.</span><span class='id generate_keypair'>generate_keypair</span><span class='lparen'>(</span><span class='id bits'>bits</span><span class='op'>=</span><span class='int'>2048</span><span class='rparen'>)</span>
+  <span class='const'>KeyPair</span><span class='period'>.</span><span class='id generate'>generate</span><span class='lparen'>(</span><span class='id bits'>bits</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="decrypt-instance_method">
+  
+    - (<tt>Object</tt>) <strong>decrypt</strong>(data, opts = {}) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+68
+69
+70
+71
+72
+73
+74</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/gibberish/rsa.rb', line 68</span>
+
+<span class='kw'>def</span> <span class='id decrypt'>decrypt</span><span class='lparen'>(</span><span class='id data'>data</span><span class='comma'>,</span> <span class='id opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No private key set!</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='ivar'>@key</span><span class='period'>.</span><span class='id private?'>private?</span>
+  <span class='kw'>unless</span> <span class='id opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:binary</span><span class='rbracket'>]</span>
+    <span class='id data'>data</span> <span class='op'>=</span> <span class='const'>Base64</span><span class='period'>.</span><span class='id decode64'>decode64</span><span class='lparen'>(</span><span class='id data'>data</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@key</span><span class='period'>.</span><span class='id private_decrypt'>private_decrypt</span><span class='lparen'>(</span><span class='id data'>data</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="encrypt-instance_method">
+  
+    - (<tt>Object</tt>) <strong>encrypt</strong>(data, opts = {}) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61
+62
+63
+64
+65
+66</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/gibberish/rsa.rb', line 59</span>
+
+<span class='kw'>def</span> <span class='id encrypt'>encrypt</span><span class='lparen'>(</span><span class='id data'>data</span><span class='comma'>,</span> <span class='id opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id enc'>enc</span> <span class='op'>=</span> <span class='ivar'>@key</span><span class='period'>.</span><span class='id public_encrypt'>public_encrypt</span><span class='lparen'>(</span><span class='id data'>data</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:binary</span><span class='rbracket'>]</span>
+    <span class='id enc'>enc</span>
+  <span class='kw'>else</span>
+    <span class='const'>Base64</span><span class='period'>.</span><span class='id encode64'>encode64</span><span class='lparen'>(</span><span class='id enc'>enc</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Sat Apr  2 16:05:19 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.6.5 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>
