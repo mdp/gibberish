@@ -55,20 +55,24 @@ describe "OpenSSL interop" do
     File.open(@priv_key_file, 'w') {|f| f.write(@keypair.private_key) }
   end
 
-  it "should decode with an OpenSSL generated private key" do
-    # openssl genrsa -des3 -out private.pem 2048
-    # openssl rsa -in private.pem -out public.pem -outform PEM -pubout
-    # openssl rsautl -encrypt -inkey public.pem -pubin -in plaintext.txt -out plaintext.crypted
-    cipher = Gibberish::RSA.new(@ossl_private_key, 'p4ssw0rd')
+  it "should decode and OpenSSL generated key and crypted message" do
+    # openssl genrsa -des3 -out spec/openssl/private.pem 2048
+    # openssl rsa -in spec/openssl/private.pem -out spec/openssl/public.pem -outform PEM -pubout
+    # openssl rsautl -encrypt -inkey public.pem -pubin -in spec/openssl/plaintext.txt -out spec/openssl/plaintext.crypted
+    cipher = Gibberish::RSA.new(@ossl_private_key, @keypair.passphrase)
     cipher.decrypt(File.read('spec/openssl/plaintext.crypted'), :binary => true).must_equal(File.read('spec/openssl/plaintext.txt'))
   end
 
-  it "should encode an OpenSSL compatible format" do
-    # openssl rsautl -decrypt -inkey /tmp/gibberish-spec-priv.pem -in /tmp/gibberish-spec-test.crypted
-    cipher = Gibberish::RSA.new(@keypair.public_key)
-    tmp_crypt_file = '/tmp/gibberish-spec-test.crypted'
-    File.open(tmp_crypt_file, 'w') {|f| f.write(cipher.encrypt("secret text", :binary => true))}
-    # `openssl rsautl -decrypt -inkey /tmp/gibberish-spec-priv.pem -in /tmp/gibberish-spec-test.crypted`
+  if ENV['INTERACTIVE']
+    it "should encode an OpenSSL compatible format" do
+      # openssl rsautl -decrypt -inkey /tmp/gibberish-spec-priv.pem -in /tmp/gibberish-spec-test.crypted
+      cipher = Gibberish::RSA.new(@keypair.public_key)
+      tmp_crypt_file = '/tmp/gibberish-spec-test.crypted'
+      File.open(tmp_crypt_file, 'w') {|f| f.write(cipher.encrypt("secret text", :binary => true))}
+      puts "\n Please type '#{@keypair.passphrase}' when prompted"
+      output = `openssl rsautl -decrypt -inkey /tmp/gibberish-spec-priv.pem -in /tmp/gibberish-spec-test.crypted`
+      output.must_equal("secret text")
+    end
   end
 
 end
