@@ -7,43 +7,82 @@ module Gibberish
   #     Gibberish::SHA1("data") #=> a17c9aaa61e80a1bf71d0d850af4e5baa9800bbd
   #     Gibberish::SHA256("data") #=> 3a6eb0790f39ac87c94f3856b2dd2c5d110e6811602261a9a923d3bb23adc8b7
   #
+  # ## OpenSSL CLI Interop
+  #
+  #     echo -n 'data' | openssl dgst -sha1
+  #     echo -n 'data' | openssl dgst -sha256
+  #     echo -n 'data' | openssl dgst -md5
+  #
+  # is the same as
+  #
+  #     Gibberish::SHA1("data")
+  #     Gibberish::SHA256("data")
+  #     Gibberish::MD5("data")
+  #
   class Digest
 
-    def self.sha1(val, opts={})
+    # Returns the SHA1 digest for the data
+    #
+    # Shorcut alias: Gibberish::SHA1(data)
+    #
+    # @param [String] key
+    # @param [#to_s] data
+    # @param [Hash] options
+    # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
+    def self.sha1(data, opts={})
+      data = data.to_s
       if opts[:binary]
-        OpenSSL::Digest::SHA1.digest(val)
+        OpenSSL::Digest::SHA1.digest(data)
       else
-        OpenSSL::Digest::SHA1.hexdigest(val)
+        OpenSSL::Digest::SHA1.hexdigest(data)
       end
     end
 
-    def self.sha256(val, opts={})
+    # Returns the SHA256 digest for the data
+    #
+    # Shorcut alias: Gibberish::SHA256(data)
+    #
+    # @param [String] key
+    # @param [#to_s] data
+    # @param [Hash] options
+    # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
+    def self.sha256(data, opts={})
+      data = data.to_s
       if opts[:binary]
-        OpenSSL::Digest::SHA256.digest(val)
+        OpenSSL::Digest::SHA256.digest(data)
       else
-        OpenSSL::Digest::SHA256.hexdigest(val)
+        OpenSSL::Digest::SHA256.hexdigest(data)
       end
     end
 
-    def self.md5(val, opts={})
+    # Returns the MD5 digest for the data
+    #
+    # Shorcut alias: Gibberish::MD5(data)
+    #
+    # @param [String] key
+    # @param [#to_s] data
+    # @param [Hash] options
+    # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
+    def self.md5(data, opts={})
+      data = data.to_s
       if opts[:binary]
-        OpenSSL::Digest::MD5.digest(val)
+        OpenSSL::Digest::MD5.digest(data)
       else
-        OpenSSL::Digest::MD5.hexdigest(val)
+        OpenSSL::Digest::MD5.hexdigest(data)
       end
     end
   end
 
-  def self.SHA1(val, opts={})
-    Digest.sha1(val,opts)
+  def self.SHA1(data, opts={})
+    Digest.sha1(data,opts)
   end
 
-  def self.SHA256(val, opts={})
-    Digest.sha256(val,opts)
+  def self.SHA256(data, opts={})
+    Digest.sha256(data,opts)
   end
 
-  def self.MD5(val, opts={})
-    Digest.md5(val,opts)
+  def self.MD5(data, opts={})
+    Digest.md5(data,opts)
   end
 
 end
