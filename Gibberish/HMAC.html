@@ -87,7 +87,8 @@
 
 <pre class="code"><span class='const'>Gibberish</span><span class='op'>::</span><span class='const'>HMAC</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>key</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>data</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span> <span class='comment'>#=&gt; 104152c5bfdca07bc633eebd46199f0255c9f49d
 </span><span class='const'>Gibberish</span><span class='op'>::</span><span class='const'>HMAC</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>key</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>data</span><span class='tstring_end'>'</span></span><span class='comma'>,</span> <span class='symbol'>:digest</span> <span class='op'>=&gt;</span> <span class='symbol'>:sha256</span><span class='rparen'>)</span>
-</pre>
+  <span class='comment'>#=&gt; 5031fe3d989c6d1537a013fa6e739da23463fdaec3b70137d828e36ace221bd0
+</span></pre>
 
   </div>
 </div>
@@ -162,17 +163,17 @@
       <pre class="lines">
 
 
-15
 16
 17
 18
 19
 20
 21
-22</pre>
+22
+23</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/gibberish/hmac.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'lib/gibberish/hmac.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id digest'>digest</span><span class='lparen'>(</span><span class='id key'>key</span><span class='comma'>,</span> <span class='id data'>data</span><span class='comma'>,</span> <span class='id opts'>opts</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id digest_type'>digest_type</span> <span class='op'>=</span> <span class='id opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:digest</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='symbol'>:sha1</span>
@@ -192,7 +193,7 @@
 </div>
     
     <div id="footer">
-  Generated on Sat Apr  2 16:05:19 2011 by 
+  Generated on Sat Apr  2 16:17:55 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.5 (ruby-1.9.2).
 </div>
