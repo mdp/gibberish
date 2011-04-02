@@ -1,2 +1,2 @@
---output-dir doc/yard
+--output-dir doc
 --markup markdown
