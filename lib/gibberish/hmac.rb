@@ -1,4 +1,11 @@
 module Gibberish
+  # Easy to use HMAC, defaults to SHA1
+  #
+  # ## Example
+  #
+  #     Gibberish::HMAC('key', 'data') #=> 104152c5bfdca07bc633eebd46199f0255c9f49d
+  #     Gibberish::HMAC('key', 'data', :digest => :sha256)
+  #
   class HMAC
     DIGEST = {
       :sha1 => OpenSSL::Digest::Digest.new('sha1'),

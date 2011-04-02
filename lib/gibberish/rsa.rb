@@ -1,22 +1,23 @@
 module Gibberish
-  class RSA
-    # This wraps the OpenSSL RSA functions
-    # Simply instantiate with a public key or private key
-    #
-    #     cipher = Gibberish::RSA.new(private_key)
-    #     enc = cipher.encrypt(data)
-    #     dec = cipher.decrypt(enc)
-    #
-    #     cipher = Gibberish::RSA(public_key)
-    #     cipher.decrypt(enc)
-    #
-    #
-    # You can also generate a keypair using Gibberish::RSA.generate_keypair
-    #
-    #     kp = Gibberish::RSA.generate_keypair(4096)
-    #     kp.public_key #=> Outputs a Base64 encoded public key
-    #     kp.private_key #=> Outputs the Base64 pem
 
+  # This wraps the OpenSSL RSA functions
+  # Simply instantiate with a public key or private key
+  #
+  #     cipher = Gibberish::RSA.new(private_key)
+  #     enc = cipher.encrypt(data)
+  #     dec = cipher.decrypt(enc)
+  #
+  #     cipher = Gibberish::RSA(public_key)
+  #     cipher.decrypt(enc)
+  #
+  #
+  # You can also generate a keypair using Gibberish::RSA.generate_keypair
+  #
+  #     kp = Gibberish::RSA.generate_keypair(4096)
+  #     kp.public_key #=> Outputs a Base64 encoded public key
+  #     kp.private_key #=> Outputs the Base64 pem
+
+  class RSA
     class KeyPair
       def self.generate(bits=2048)
         self.new(OpenSSL::PKey::RSA.generate(bits))
