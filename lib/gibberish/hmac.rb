@@ -5,6 +5,7 @@ module Gibberish
   #
   #     Gibberish::HMAC('key', 'data') #=> 104152c5bfdca07bc633eebd46199f0255c9f49d
   #     Gibberish::HMAC('key', 'data', :digest => :sha256)
+  #       #=> 5031fe3d989c6d1537a013fa6e739da23463fdaec3b70137d828e36ace221bd0
   #
   class HMAC
     DIGEST = {
