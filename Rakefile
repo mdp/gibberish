@@ -1,8 +1,11 @@
-require 'rake/testtask'
-Rake::TestTask.new do |t|
-  t.libs << "spec"
-  t.test_files = FileList['spec/*_spec.rb']
-  t.verbose = true
+desc "run specs"
+task :spec do
+    $LOAD_PATH.unshift '.', 'spec', 'lib'
+    require 'spec/spec_helper'
+    MiniTest::Unit.autorun
+    Dir.glob('spec/**/*_spec.rb') do |file|    
+      load file
+    end
 end
-$: << '.'
-require 'spec/spec_helper'
+
+task :test => :spec
