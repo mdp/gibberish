@@ -1,0 +1,6 @@
+lib/gibberish.rb 802b1397065b8f34b094cd5e797446a42c2c9b7e
+lib/gibberish/rsa.rb 9256b67d4419175eddeb3e8a695a20ddb44698e2
+lib/gibberish/aes.rb c0f393617c375e47516948a7540eb2bd9f9a261c
+lib/gibberish/hmac.rb ba1014fb761c49ff9b79a48282a8ec23e87780c5
+lib/gibberish/digest.rb 37e1d1c4daa2ce783e26c7920aa927dc4c869f4e
+lib/gibberish/version.rb 698d6220529ab0bfd8853ae631aa0eb5b75ef934
