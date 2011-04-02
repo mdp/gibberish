@@ -79,6 +79,13 @@ Defaults to 256 bit digest
 
 [Find out more](http://mdp.github.com/gibberish/Gibberish/Digest.html)
 
+## Run the tests
+
+    git clone https://github.com/mdp/gibberish.git
+    cd gibberish
+    bundle install
+    rake test
+
 ## TODO
 
 - Cover OpenSSL exceptions with more reasonable and easier to understand exceptions.
