@@ -73,7 +73,7 @@ module Gibberish
     # Expects a public key at the minumum
     #
     # @param [#to_s] key public or private
-    # @params [String] passphrase to key
+    # @param [String] passphrase to key
     #
     def initialize(key, passphrase=nil)
       @key = OpenSSL::PKey::RSA.new(key.to_s, passphrase)
