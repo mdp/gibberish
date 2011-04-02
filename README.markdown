@@ -43,7 +43,7 @@ Gibberish AES is fully compatible with default OpenSSL on the command line
     echo "U2FsdGVkX187oKRbgDkUcMKaFfB5RsXQj/X4mc8X3lsUVgwb4+S55LQo6f6N\nIDMX\n" | \
     openssl enc -d -aes-256-cbc -a -k p4ssw0rd
 
-[Find out more](http://rdoc.info/github/mdp/gibberish/master/Gibberish/AES)
+[Find out more](http://mdp.github.com/gibberish/Gibberish/AES.html)
 
 ## RSA
 
@@ -55,7 +55,7 @@ Gibberish AES is fully compatible with default OpenSSL on the command line
     cipher = Gibberish::RSA.new(k.private_key)
     dec = cipher.decrypt(enc)
 
-[Find out more](http://rdoc.info/github/mdp/gibberish/master/Gibberish/RSA)
+[Find out more](http://mdp.github.com/gibberish/Gibberish/RSA.html)
 
 ## HMAC
 
@@ -64,7 +64,7 @@ Defaults to 256 bit digest
     Gibberish::HMAC("key", "some data")
     #=> 521677c580722c5c52fa15d978e8656341c4f3c5
 
-[Find out more](http://rdoc.info/github/mdp/gibberish/master/Gibberish/HMAC)
+[Find out more](http://mdp.github.com/gibberish/Gibberish/HMAC.html)
 
 ## Digests
 
@@ -77,7 +77,7 @@ Defaults to 256 bit digest
     Gibberish::SHA256("somedata")
     #=> 87d149cb424c0387656f211d2589fb5b1e16229921309e98588419ccca8a7362
 
-[Find out more](http://rdoc.info/github/mdp/gibberish/master/Gibberish/Digest)
+[Find out more](http://mdp.github.com/gibberish/Gibberish/Digest.html)
 
 ## TODO
 
