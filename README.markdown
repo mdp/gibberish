@@ -77,6 +77,9 @@ Defaults to 128 bit digest
     Gibberish::SHA256("somedata")
     #=> 87d149cb424c0387656f211d2589fb5b1e16229921309e98588419ccca8a7362
 
+    Gibberish::SHA512("somedata")
+    #=> a053441b6de662599ecb14c580d6637dcb856a66b2a40a952d39df772e47e98ea22f9e105b31463c5cf2472feae7649464fe89d99ceb6b0bc398a6926926f416
+
 [Find out more](http://mdp.github.com/gibberish/Gibberish/Digest.html)
 
 ## Run the tests
