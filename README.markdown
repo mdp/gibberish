@@ -59,10 +59,15 @@ Gibberish AES is fully compatible with default OpenSSL on the command line
 
 ## HMAC
 
-Defaults to 128 bit digest
+Defaults to 128 bit digest and SHA1
 
     Gibberish::HMAC("key", "some data")
     #=> 521677c580722c5c52fa15d978e8656341c4f3c5
+
+Other digests can be used
+
+    Gibberish::HMAC("key", "some data", :digest => :sha256)
+    #=> 01add3f98ce4d49403d98362a046c6cca2c79d778426282c53e4f628f648c12b
 
 [Find out more](http://mdp.github.com/gibberish/Gibberish/HMAC.html)
 
