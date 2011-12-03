@@ -79,8 +79,14 @@ Other digests can be used
     Gibberish::SHA1("somedata")
     #=> efaa311ae448a7374c122061bfed952d940e9e37
 
+    Gibberish::SHA224("somedata")
+    #=> a39b86d838273f5ff4879c26f85e3cb333bb44d73b24f275bad1a6c6
+
     Gibberish::SHA256("somedata")
     #=> 87d149cb424c0387656f211d2589fb5b1e16229921309e98588419ccca8a7362
+
+    Gibberish::SHA384("somedata")
+    #=> b6800736973cc061e3efb66a34f8bda8fa946804c6cc4f26a6b9b3950211078801709d0d82707c569a07c8f63c804c87
 
     Gibberish::SHA512("somedata")
     #=> a053441b6de662599ecb14c580d6637dcb856a66b2a40a952d39df772e47e98ea22f9e105b31463c5cf2472feae7649464fe89d99ceb6b0bc398a6926926f416
