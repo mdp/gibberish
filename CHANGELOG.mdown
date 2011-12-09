@@ -1,3 +1,6 @@
+### v1.2.0
+* Added digest support for SHA224/384 and HMAC SHA224/384/512. [Pull request #5](https://github.com/mdp/gibberish/pull/5)
+
 ### v1.1.0
 
-Add SHA512 support
+* Add SHA512 support
