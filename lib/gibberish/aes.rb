@@ -38,7 +38,7 @@ module Gibberish
     end
 
     def encrypt(data, opts={})
-      salt = generate_salt
+      salt = generate_salt(opts[:salt])
       setup_cipher(:encrypt, salt)
       e = cipher.update(data) + cipher.final
       e = "Salted__#{salt}#{e}" #OpenSSL compatible
@@ -59,7 +59,10 @@ module Gibberish
 
     private
 
-    def generate_salt
+    def generate_salt(supplied_salt)
+      if supplied_salt
+        return supplied_salt.to_s[0,8].ljust(8,'.')
+      end
       s = ''
       8.times {s << rand(255).chr}
       s
