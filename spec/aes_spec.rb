@@ -23,36 +23,36 @@ describe "the aes cipher" do
   it "when salt is specified, encrypted text from repeated calls (with same salt) be the same" do
     secret_text = "Made with Gibberish"
     salt = 'NaClNaCl'
-    encrypted1 = @cipher.e(secret_text, {salt: salt})
-    encrypted2 = @cipher.e(secret_text, {salt: salt})
+    encrypted1 = @cipher.e(secret_text, {:salt => salt})
+    encrypted2 = @cipher.e(secret_text, {:salt => salt})
     encrypted1.must_equal(encrypted2)
   end
 
   it "when supplied salt is too long, text should still encrypt/decrypt correctly" do
     secret_text = "Made with Gibberish"
     salt = 'NaClNaClNaClNaClNaClNaClNaClNaClNaClNaCl'
-    encrypted1 = @cipher.e(secret_text, {salt: salt})
+    encrypted1 = @cipher.e(secret_text, {:salt => salt})
     @cipher.d(encrypted1).must_equal(secret_text)
   end
 
   it "when supplied salt is too short, text should still encrypt/decrypt correctly" do
     secret_text = "Made with Gibberish"
     salt = 'NaCl'
-    encrypted1 = @cipher.e(secret_text, {salt: salt})
+    encrypted1 = @cipher.e(secret_text, {:salt => salt})
     @cipher.d(encrypted1).must_equal(secret_text)
   end
 
   it "when number is supplied for salt, text should still encrypt/decrypt correctly" do
     secret_text = "Made with Gibberish"
     salt = 42
-    encrypted1 = @cipher.e(secret_text, {salt: salt})
+    encrypted1 = @cipher.e(secret_text, {:salt => salt})
     @cipher.d(encrypted1).must_equal(secret_text)
   end
 
   it "when idiotic value is supplied for salt, text should still encrypt/decrypt correctly" do
     secret_text = "Made with Gibberish"
-    salt = {whoknew: "I'm an idiot"}
-    encrypted1 = @cipher.e(secret_text, {salt: salt})
+    salt = {:whoknew => "I'm an idiot"}
+    encrypted1 = @cipher.e(secret_text, {:salt => salt})
     @cipher.d(encrypted1).must_equal(secret_text)
   end
 
