@@ -1,3 +1,7 @@
+### v1.2.1
+* Added support for an optional salt - PR mdp/gibberish#9
+* Adding gem signing
+
 ### v1.2.0
 * Added digest support for SHA224/384 and HMAC SHA224/384/512. [Pull request #5](https://github.com/mdp/gibberish/pull/5)
 
