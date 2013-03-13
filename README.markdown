@@ -1,4 +1,5 @@
 # Gibberish - Encryption in Ruby made simple
+![Travis](https://secure.travis-ci.org/mdp/gibberish.png)
 
 ### What
 Gibberish is an opinionated cryptography library for Ruby. Its objective is easy but secure

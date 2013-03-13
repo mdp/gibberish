@@ -1,3 +1,6 @@
+### v1.2.2
+* Added support for EBC mode on AES [PR #10](https://github.com/mdp/gibberish/pull/10)
+
 ### v1.2.1
 * Added support for an optional salt - PR mdp/gibberish#9
 * Adding gem signing
