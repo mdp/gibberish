@@ -14,10 +14,6 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "gibberish"
 
-  # Gem Signing
-  s.signing_key = File.expand_path("~/.ssh/gem-private_key.pem")
-  s.cert_chain = ["gem-public_cert.pem"]
-
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
