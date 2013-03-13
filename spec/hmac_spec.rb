@@ -8,7 +8,7 @@ describe "HMAC" do
 
   it "should work with OpenSSL HMAC" do
     hmac = Gibberish::HMAC("password", "data\n")
-    o_hmac = `echo "data" | openssl dgst -sha1 -hmac 'password'`
+    o_hmac = `echo "data" | openssl dgst -sha1 -hmac 'password' | sed 's/^.*= //'`
     hmac.must_equal(o_hmac.chomp)
   end
 
@@ -19,7 +19,7 @@ describe "HMAC" do
 
   it "should work with OpenSSL HMAC for sha224" do
     hmac = Gibberish::HMAC("password", "data\n", :digest => :sha224)
-    o_hmac = `echo "data" | openssl dgst -sha224 -hmac 'password'`
+    o_hmac = `echo "data" | openssl dgst -sha224 -hmac 'password' | sed 's/^.*= //'`
     hmac.must_equal(o_hmac.chomp)
   end
 
@@ -30,7 +30,7 @@ describe "HMAC" do
 
   it "should work with OpenSSL HMAC for sha256" do
     hmac = Gibberish::HMAC("password", "data\n", :digest => :sha256)
-    o_hmac = `echo "data" | openssl dgst -sha256 -hmac 'password'`
+    o_hmac = `echo "data" | openssl dgst -sha256 -hmac 'password' | sed 's/^.*= //'`
     hmac.must_equal(o_hmac.chomp)
   end
 
@@ -41,7 +41,7 @@ describe "HMAC" do
 
   it "should work with OpenSSL HMAC for sha384" do
     hmac = Gibberish::HMAC("password", "data\n", :digest => :sha384)
-    o_hmac = `echo "data" | openssl dgst -sha384 -hmac 'password'`
+    o_hmac = `echo "data" | openssl dgst -sha384 -hmac 'password' | sed 's/^.*= //'`
     hmac.must_equal(o_hmac.chomp)
   end
 
@@ -51,7 +51,7 @@ describe "HMAC" do
 
   it "should work with OpenSSL HMAC for sha512" do
     hmac = Gibberish::HMAC("password", "data\n", :digest => :sha512)
-    o_hmac = `echo "data" | openssl dgst -sha512 -hmac 'password'`
+    o_hmac = `echo "data" | openssl dgst -sha512 -hmac 'password' | sed 's/^.*= //'`
     hmac.must_equal(o_hmac.chomp)
   end
 

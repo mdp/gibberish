@@ -9,3 +9,4 @@ task :spec do
 end
 
 task :test => :spec
+task :default => [:test]
