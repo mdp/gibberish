@@ -31,10 +31,12 @@ module Gibberish
     #
     # @param [String] password
     # @param [Integer] size
-    def initialize(password, size=256)
+    # @param [String] mode
+    def initialize(password, size=256, mode="cbc")
       @password = password
       @size = size
-      @cipher = OpenSSL::Cipher::Cipher.new("aes-#{size}-cbc")
+      @mode = mode
+      @cipher = OpenSSL::Cipher::Cipher.new("aes-#{size}-#{mode}")
     end
 
     def encrypt(data, opts={})
