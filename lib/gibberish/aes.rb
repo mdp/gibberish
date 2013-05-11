@@ -25,6 +25,8 @@ module Gibberish
   #
   class AES
 
+    BUFFER_SIZE = 4096
+
     attr_reader :password, :size, :cipher
 
     # Initialize with the password
@@ -59,6 +61,20 @@ module Gibberish
     alias :dec :decrypt
     alias :d :decrypt
 
+    def encrypt_stream(in_stream, out_stream, opts={})
+      salt = generate_salt(opts[:salt])
+      setup_cipher(:encrypt, salt)
+      out_stream << "Salted__#{salt}"
+      copy_stream in_stream, out_stream
+    end
+
+    def decrypt_stream(in_stream, out_stream)
+      header = in_stream.read(16)
+      salt = header[8..15]
+      setup_cipher(:decrypt, salt)
+      copy_stream in_stream, out_stream
+    end
+
     private
 
     def generate_salt(supplied_salt)
@@ -74,5 +90,15 @@ module Gibberish
       cipher.send(method)
       cipher.pkcs5_keyivgen(password, salt, 1)
     end
+
+    def copy_stream(in_stream, out_stream)
+      buf = ''
+      while in_stream.read(BUFFER_SIZE, buf)
+        out_stream << cipher.update(buf)
+      end
+      out_stream << cipher.final
+      out_stream.flush
+    end
+
   end
 end
