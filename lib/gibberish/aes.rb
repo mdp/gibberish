@@ -12,16 +12,19 @@ module Gibberish
   #     cipher = Gibberish::AES.new('p4ssw0rd')
   #     cipher.encrypt("some secret text")
   #     #=> "U2FsdGVkX1/D7z2azGmmQELbMNJV/n9T/9j2iBPy2AM=\n"
+  #     cipher.encrypt_file("secret.txt", "secret.txt.enc")
   #
   # ### Decrypting
   #
   #     cipher = Gibberish::AES.new('p4ssw0rd')
   #     cipher.decrypt(""U2FsdGVkX1/D7z2azGmmQELbMNJV/n9T/9j2iBPy2AM=\n"")
   #     #=> "some secret text"
+  #     cipher.decrypt_file("secret.txt.enc", "secret.txt")
   #
   # ## OpenSSL Interop
   #
   #     echo "U2FsdGVkX1/D7z2azGmmQELbMNJV/n9T/9j2iBPy2AM=\n" | openssl enc -d -aes-256-cbc -a -k p4ssw0rd
+  #     openssl aes-256-cbc -d -in secret.txt.enc -out secret.txt -k p4ssw0rd
   #
   class AES
 
@@ -58,6 +61,41 @@ module Gibberish
     end
     alias :dec :decrypt
     alias :d :decrypt
+
+    def encrypt_file(from_file, to_file, opts={})
+      salt = generate_salt(opts[:salt])
+      setup_cipher(:encrypt, salt)
+      buf = ""
+      File.open(to_file, "wb") do |outf|
+        outf << "Salted__#{salt}"
+        File.open(from_file, "rb") do |inf|
+          while inf.read(4096, buf)
+            outf << self.cipher.update(buf)
+          end
+          outf << self.cipher.final
+        end
+      end
+    end
+    alias :enc_file :encrypt_file
+    alias :ef :encrypt_file
+
+    def decrypt_file(from_file, to_file)
+      buf = ""
+      salt = ""
+      File.open(to_file, "wb") do |outf|
+        File.open(from_file, "rb") do |inf|
+          inf.seek(8, IO::SEEK_SET)
+          inf.read(8, salt)
+          setup_cipher(:decrypt, salt)
+          while inf.read(4096, buf)
+            outf << self.cipher.update(buf)
+          end
+          outf << self.cipher.final
+        end
+      end
+    end
+    alias :dec_file :decrypt_file
+    alias :df :decrypt_file
 
     private
 
