@@ -15,12 +15,12 @@ describe "the aes cipher" do
   end
 
   it "should encrypt file and be compatible with OpenSSL CLI" do
-    source_file = "spec/fixtures/secret.txt"
+    source_file_path = "spec/fixtures/secret.txt"
     encrypted_file = Tempfile.new('secret.txt.enc')
-    @cipher.ef(source_file, encrypted_file)
+    @cipher.ef(source_file_path, encrypted_file.path)
     decrypted_file = Tempfile.new('secret.txt')
     `openssl aes-256-cbc -d -in #{encrypted_file.path} -out #{decrypted_file.path} -k password`
-    FileUtils.cmp(source_file, decrypted_file).must_equal(true)
+    FileUtils.cmp(source_file_path, decrypted_file.path).must_equal(true)
   end
 
   it "when salt is not specified, encrypted text from repeated calls should not be the same" do
@@ -74,12 +74,12 @@ describe "the aes cipher" do
   end
 
   it "should decrypt file encrypted with OpenSSL CLI" do
-    source_file = "spec/fixtures/secret.txt"
+    source_file_path = "spec/fixtures/secret.txt"
     encrypted_file = Tempfile.new('secret.txt.enc')
-    `openssl aes-256-cbc -salt -in #{source_file} -out #{encrypted_file.path} -k password`
+    `openssl aes-256-cbc -salt -in #{source_file_path} -out #{encrypted_file.path} -k password`
     decrypted_file = Tempfile.new('secret.txt')
-    @cipher.df(encrypted_file, decrypted_file)
-    FileUtils.cmp(source_file, decrypted_file).must_equal(true)
+    @cipher.df(encrypted_file.path, decrypted_file.path)
+    FileUtils.cmp(source_file_path, decrypted_file.path).must_equal(true)
   end
 
 end
