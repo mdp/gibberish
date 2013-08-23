@@ -14,7 +14,7 @@ interface in Ruby.
 line interface. Each function will include documentation on how to perform
 the same routine via the command line with OpenSSL
 
-- It should default to a reasonably secure setting, e.g. 256-bit AES, or SHA1 for HMAC  
+- It should default to a reasonably secure setting, e.g. 256-bit AES, or SHA1 for HMAC
 But it should allow the user to specify a stronger setting, within reason.
 
 - Procedures should be well tested and be compatible with Ruby 1.8.7 and 1.9
@@ -39,10 +39,18 @@ Defaults to 256 bit CBC encryption
     cipher.dec("U2FsdGVkX187oKRbgDkUcMKaFfB5RsXQj/X4mc8X3lsUVgwb4+S55LQo6f6N\nIDMX")
     #=> "Some top secret data"
 
+To encrypt / decrypt a file
+
+    cipher.encrypt_file("secret.txt", "secret.txt.enc")
+
+    cipher.decrypt_file("secret.txt.enc", "secret.txt")
+
 Gibberish AES is fully compatible with default OpenSSL on the command line
 
     echo "U2FsdGVkX187oKRbgDkUcMKaFfB5RsXQj/X4mc8X3lsUVgwb4+S55LQo6f6N\nIDMX\n" | \
     openssl enc -d -aes-256-cbc -a -k p4ssw0rd
+
+    openssl aes-256-cbc -d -in secret.txt.enc -out secret.txt -k p4ssw0rd
 
 [Find out more](http://mdp.github.com/gibberish/Gibberish/AES.html)
 
