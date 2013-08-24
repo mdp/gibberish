@@ -1,3 +1,7 @@
+### v1.3.0
+* Add support for file encryption [PR #12](https://github.com/mdp/gibberish/pull/12)
+* Add support for streaming encryption [PR #11](https://github.com/mdp/gibberish/pull/11)
+
 ### v1.2.2
 * Added support for EBC mode on AES [PR #10](https://github.com/mdp/gibberish/pull/10)
 
