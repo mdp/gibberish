@@ -55,6 +55,7 @@ module Gibberish
     alias :e :encrypt
 
     def decrypt(data, opts={})
+      raise ArgumentError, 'Data is too short' unless data.length >= 16
       data = Base64.decode64(data) unless opts[:binary]
       salt = data[8..15]
       data = data[16..-1]
