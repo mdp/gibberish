@@ -82,6 +82,10 @@ describe "the aes cipher" do
     FileUtils.cmp(source_file_path, decrypted_file.path).must_equal(true)
   end
 
+  it "should throw correct exception when decryption string is too short" do
+    assert_raises(ArgumentError) {@cipher.d("short")}
+  end
+
   describe 'stream encryption' do
 
     it 'encrypts a file' do
