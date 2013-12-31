@@ -25,11 +25,11 @@ module Gibberish
   #
   class HMAC
     DIGEST = {
-      :sha1 => OpenSSL::Digest::Digest.new('sha1'),
-      :sha224 => OpenSSL::Digest::Digest.new('sha224'),
-      :sha256 => OpenSSL::Digest::Digest.new('sha256'),
-      :sha384 => OpenSSL::Digest::Digest.new('sha384'),
-      :sha512 => OpenSSL::Digest::Digest.new('sha512')
+      :sha1 => OpenSSL::Digest.new('sha1'),
+      :sha224 => OpenSSL::Digest.new('sha224'),
+      :sha256 => OpenSSL::Digest.new('sha256'),
+      :sha384 => OpenSSL::Digest.new('sha384'),
+      :sha512 => OpenSSL::Digest.new('sha512')
     }
 
     # Returns the HMAC for the key and data
