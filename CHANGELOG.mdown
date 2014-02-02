@@ -1,3 +1,6 @@
+### v1.4.0
+* Fix deprecation. Support for 1.8.7 is deprecated, so bumping minor rev [PR #15](https://github.com/mdp/gibberish/pull/15)
+
 ### v1.3.1
 * Better errors [PR #14](https://github.com/mdp/gibberish/pull/14)
 
