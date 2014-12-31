@@ -52,6 +52,8 @@ Gibberish AES is fully compatible with default OpenSSL on the command line
 
     openssl aes-256-cbc -d -in secret.txt.enc -out secret.txt -k p4ssw0rd
 
+(Note: OpenSSL "enc" uses a non-standard file format which lacks [key stretching](http://en.wikipedia.org/wiki/Key_stretching), this means less secure passwords are more susceptible to brute forcing. The next version of Gibberish will include key stretching but will break compatiblity with OpenSSL. This change will be a major version bump to 2.0)
+
 [Find out more](http://mdp.github.com/gibberish/Gibberish/AES.html)
 
 ## RSA
