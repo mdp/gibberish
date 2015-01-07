@@ -27,6 +27,28 @@ module Gibberish
   #     openssl aes-256-cbc -d -in secret.txt.enc -out secret.txt -k p4ssw0rd
   #
   class AES
+    attr_reader :password, :iter, :adata
+    def initialize(password, adata="", iter=100_000)
+      @password = password
+      @adata = adata
+      @iter = iter
+    end
+
+    def encrypt(data)
+      SJCL.encrypt(@password, data, {:iter => @iter, :adata => @adata})
+    end
+
+    def decrypt(crypt)
+      # Allow for backwards compatibility
+      if crypt.index("U2F") == 0
+        OpenSSLCompatAES.new(@password)
+        return cipher.dec(crypt)
+      end
+      SJCL.decrypt(@password, crypt)
+    end
+
+  end
+  class OpenSSLCompatAES
 
     BUFFER_SIZE = 4096
 

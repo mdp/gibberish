@@ -3,3 +3,4 @@ gemspec
 gem 'minitest'
 gem 'mini_shoulda'
 gem 'rake'
+gem 'sjcl'
