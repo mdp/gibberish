@@ -4,7 +4,7 @@ require 'tempfile'
 describe "the aes cipher" do
 
   before do
-    @cipher = Gibberish::AES.new("password")
+    @cipher = Gibberish::OpenSSLCompatAES.new("password")
   end
 
   it "should encrypt text and be compatible with OpenSSL CLI" do
