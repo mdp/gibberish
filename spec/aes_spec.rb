@@ -1,7 +1,36 @@
 require 'spec_helper'
 require 'tempfile'
 
-describe "the aes cipher" do
+describe "the sjcl compatible implementation of aes" do
+
+  describe "decryption" do
+
+    before do
+      @cipher = Gibberish::AES.new("s33krit")
+    end
+
+    it "should decrypt gcm encoded text from SJCL" do
+      # With a 64bit authentication tag
+      json = '{"iv":"pO1RiSKSfmlLPMIS","v":1,"iter":1000,"ks":128,"ts":64,"mode":"gcm","adata":"","cipher":"aes","salt":"BC60XoGJqnY=","ct":"Jgm8bExXvpbEDxOxFDroBuFmczMlfF4G"}'
+      @cipher.decrypt(json).must_equal("This is a secret");
+      # With a 96bit authentication tag
+      json = '{"iv":"6ru5wmyPl2hfhMmb","v":1,"iter":1000,"ks":128,"ts":96,"mode":"gcm","adata":"","cipher":"aes","salt":"KhrgNREkjN4=","ct":"/0LMJz7pYDXSdFa+x3vL7uc46Nz7y5kV9DhEBQ=="}'
+      @cipher.decrypt(json).must_equal("This is a secret");
+      # With a 128bit authentication tag
+      json = '{"iv":"S79wFwpjbSMz1FSB","v":1,"iter":1000,"ks":128,"ts":128,"mode":"gcm","adata":"","cipher":"aes","salt":"KhrgNREkjN4=","ct":"j8pJmmilaJ6We2fEq/NvAxka4Z70F7IEK/m9/y3hHoo="}'
+      @cipher.decrypt(json).must_equal("This is a secret");
+    end
+  end
+
+  describe "encryption" do
+
+    before do
+      @cipher = Gibberish::AES.new("s33krit")
+    end
+  end
+end
+
+describe "the openssl command line compatible aes cipher" do
 
   before do
     @cipher = Gibberish::OpenSSLCompatAES.new("password")
