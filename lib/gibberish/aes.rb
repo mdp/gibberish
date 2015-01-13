@@ -50,7 +50,9 @@ module Gibberish
     end
 
     def decrypt(crypt, legacy_decryption=false)
-      # Allow for backwards compatibility
+      # Allow for backwards compatibility, however
+      # this would also introduce non-authenticated decryption,
+      # therefore it should be used with caution
       if legacy_decryption && crypt.index("U2F") == 0
         OpenSSLCompatAES.new(@password)
         return cipher.dec(crypt)
@@ -76,7 +78,7 @@ module Gibberish
       c.iv = iv
       c.auth_data = opts[:adata] || ""
       ct = c.update(plaintext) + c.final
-      tag = c.auth_tag
+      tag = c.auth_tag(opts[:ts]);
       ct = ct + auth_tag
       out = {
         v: opts[:v], adata: opts[:adata], ks: opts[:ks], ct: Base64.strict_encode64(ct), ts: tag.length,
@@ -105,7 +107,7 @@ module Gibberish
       c.key = key
       c.iv = iv
       c.auth_tag = tag;
-      c.auth_data = ""
+      c.auth_data = h[:adata] || ""
       c.update(ct) + c.final()
     end
   end
