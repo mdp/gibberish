@@ -21,7 +21,7 @@ describe "the sjcl compatible implementation of aes" do
     end
     it "should check the options before attempting to decrypt" do
       json = '{"iv":"S79wFwpjbSMz1FSB","v":1,"iter":1000000,"ks":128,"ts":128,"mode":"gcm","adata":"","cipher":"aes","salt":"KhrgNREkjN4=","ct":"j8pJmmilaJ6We2fEq/NvAxka4Z70F7IEK/m9/y3hHoo="}'
-      assert_raises(Gibberish::SJCL::BadArguments) {
+      assert_raises(Gibberish::AES::SJCL::CipherOptionsError) {
         @cipher.decrypt(json).must_equal("This is a secret");
       }
     end
@@ -38,7 +38,7 @@ end
 describe "the openssl command line compatible aes cipher" do
 
   before do
-    @cipher = Gibberish::OpenSSLCompatAES.new("password")
+    @cipher = Gibberish::AES::LegacyOpenSSL.new("password")
   end
 
   it "should encrypt text and be compatible with OpenSSL CLI" do

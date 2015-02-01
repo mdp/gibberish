@@ -9,7 +9,7 @@ module Gibberish
   # ## Compatibility with SJCL, BouncyCastle
   #   It outputs into a format that is compatible with SJCL and easy to
   #   consume in other libraries.
-  #   
+  #
   #   TODO: Include BouncyCastle example
   #
   # ## Basic Usage
@@ -18,7 +18,7 @@ module Gibberish
   #
   #     cipher = Gibberish::AES.new('p4ssw0rd')
   #     cipher.encrypt("some secret text")
-  #     #=> Outputs a string of JSON container everything that needs to be saved
+  #     #=> Outputs a JSON string containing everything that needs to be saved
   #
   # ### Decrypting
   #
@@ -26,46 +26,84 @@ module Gibberish
   #     cipher.decrypt('{"iv":"saWaknqlf5aalGyU","v":1,"iter":1000,"ks":256,"ts":64,"mode":"gcm","adata":"","cipher":"aes","salt":"0GXgxJ/QAUo=","ct":"nKsmfrNBh39Rcv9KcMkIAl3sSapmou8A"}')
   #     #=> "some secret text"
   #
+  #
+  # ## Interoperability with SJCL's GCM mode AES
+  #
+  # ### Decryption with SJCL
+  #
+  # No special settings are required. Gibberish AES is designed to be fully compatible with SJCL
+  #
+  # ```javascript
+  # var cleartext = SJCL.encrypt('key', 'output from Gibberish AES');
+  # ```
+  #
+  # ### Encryption with SJCL for Gibberish
+  #
+  # Ruby's bindings with OpenSSL don't allow for initialization vectors of more than 3 words(12 bytes),
+  # therefore you must explicitly set the IV to 12 bytes when encrypting with SJCL.
+  #
+  # ```javascript
+  # var ciphertext = SJCL.encrypt('key', 'plain text', {mode: 'gcm', iv: SJCL.random.randomWords(3, 0)});
+  # ```
+  #
   # ## Backward compatibility with older pre 2.0 Gibberish
   #
   #  Gibberish was previously designed to be compatible with OpenSSL on the command line with CBC mode AES.
-  #  This has been deprecated in favor of GCM mode, along with key hardening. However, if you pass Gibberish a
-  #  string previously created with Gibberish < 2.0 or OpenSSL on the command line, it will still decrypt it.
-  # 
-  # ### Older AES-256-CBC mode
-  # If you still want to use it, you will need to call OpenSSLCompatAES
+  #  This has been deprecated in favor of GCM mode, along with key hardening. However, you may still
+  #  decrypt and encrypt using legacy convienience methods below:
   #
-  #     cipher = Gibberish::OpenSSLCompatAES.new('p4ssw0rd')
-  #     cipher.encrypt("some secret text")
+  # ### Legacy AES-256-CBC mode
   #
+  #     cipher = Gibberish::AES::LegacyOpenSSL.new('p4ssw0rd')
+  #     cipher_text = cipher.encrypt("some secret text")
+  #     # => U2FsdGVkX1/D7z2azGmmQELbMNJV/n9T/9j2iBPy2AM=
+  #
+  #     cipher.decrypt(cipher_text)
+  #
+  #     # From the command line
   #     echo "U2FsdGVkX1/D7z2azGmmQELbMNJV/n9T/9j2iBPy2AM=\n" | openssl enc -d -aes-256-cbc -a -k p4ssw0rd
   #
   class AES
-    def initialize(password)
-      @password = password
+
+    # Returns the AES object
+    #
+    # @param [String] password
+    # @param [Hash] opts
+    # @option opts [Symbol] :mode ('gcm') the AES mode to use
+    # @option opts [Symbol] :ks (256) keystrength
+    # @option opts [Symbol] :iter (100_000) number of PBKDF2 iterations to run on the password
+    # @option opts [Symbol] :max_iter (100_000) maximum allow iterations, set to prevent DOS attack of someone setting a large 'iter' value in the ciphertext JSON
+    # @option opts [Symbol] :ts (64) length of the authentication data hash
+    def initialize(password, opts={})
+      @cipher = SJCL.new(password, opts)
     end
 
-    def encrypt(data, opts={})
-      cipher = SJCL.new(opts)
-      cipher.encrypt(@password, data)
+    # Returns the ciphertext in the form of a JSON string
+    #
+    # @param [String] data
+    # @param [String] authenticated_data (Won't be encrypted)
+    def encrypt(data, authenticated_data='')
+      @cipher.encrypt(data, authenticated_data)
     end
 
-    def decrypt(crypt, opts={})
+    # Returns a plaintext string
+    #
+    # @param [String] ciphertext
+    def decrypt(ciphertext, opts={})
       # Allow for backwards compatibility, however
       # this would also introduce non-authenticated decryption,
       # therefore it should be used with caution
-      if opts[:legacy_decryption] && crypt.index("U2F") == 0
-        OpenSSLCompatAES.new(@password)
-        return cipher.dec(crypt)
+      if opts[:legacy_decryption] && ciphertext.index("U2F") == 0
+        LegacyOpenSSL.new(@password)
+        return cipher.dec(ciphertext)
       end
-      cipher = SJCL.new(opts)
-      cipher.decrypt(@password, crypt)
+      @cipher.decrypt(ciphertext)
     end
 
   end
 
-  class SJCL
-    class BadArguments < ArgumentError; end
+  class AES::SJCL
+    class CipherOptionsError < ArgumentError; end
     MAX_ITER = 100_000
     ALLOWED_MODES = ['ccm', 'gcm']
     ALLOWED_KS = [128, 192, 256]
@@ -74,41 +112,39 @@ module Gibberish
       v:1, iter:100_000, ks:256, ts:64,
       mode:"gcm", adata:"", cipher:"aes", max_iter: MAX_ITER
     }
-    def initialize(opts={})
+    def initialize(password, opts={})
+      @password = password
       @opts = DEFAULTS.merge(opts)
       check_cipher_options(@opts)
     end
 
-    def encrypt(passcode, plaintext, c_opts={})
-      c_opts = @opts.merge(c_opts)
-      check_cipher_options(c_opts)
+    def encrypt(plaintext, adata='')
       salt = SecureRandom.random_bytes(8)
       iv = SecureRandom.random_bytes(12)
-      key = OpenSSL::PKCS5.pbkdf2_hmac(passcode, salt, c_opts[:iter], c_opts[:ks]/8, 'SHA256')
-      cipherMode = "#{c_opts[:cipher]}-#{c_opts[:ks]}-#{c_opts[:mode]}"
+      key = OpenSSL::PKCS5.pbkdf2_hmac(@password, salt, @opts[:iter], @opts[:ks]/8, 'SHA256')
+      cipherMode = "#{@opts[:cipher]}-#{@opts[:ks]}-#{@opts[:mode]}"
       c = OpenSSL::Cipher.new(cipherMode)
       c.encrypt
       c.key = key
       c.iv = iv
-      c.auth_data = c_opts[:adata] || ""
+      c.auth_data = adata
       ct = c.update(plaintext) + c.final
-      tag = c.auth_tag(c_opts[:ts]);
+      tag = c.auth_tag(@opts[:ts]);
       ct = ct + auth_tag
       out = {
-        v: c_opts[:v], adata: c_opts[:adata], ks: c_opts[:ks], ct: Base64.strict_encode64(ct), ts: tag.length,
-        iter: c_opts[:iter], iv:  Base64.strict_encode64(iv), salt: Base64.strict_encode64(salt)
+        v: @opts[:v], adata: adata, ks: @opts[:ks], ct: Base64.strict_encode64(ct), ts: tag.length,
+        iter: @opts[:iter], iv:  Base64.strict_encode64(iv), salt: Base64.strict_encode64(salt)
       }
       out.to_json
     end
-    def decrypt(passcode, h)
+    def decrypt(h)
       begin
         h = JSON.parse(h, {:symbolize_names => true})
       rescue
         raise "Unable to parse JSON of crypted text"
       end
-      h[:max_iter] = @opts[:max_iter]
       check_cipher_options(h)
-      key = OpenSSL::PKCS5.pbkdf2_hmac(passcode, Base64.decode64(h[:salt]), h[:iter], h[:ks]/8, 'SHA256')
+      key = OpenSSL::PKCS5.pbkdf2_hmac(@password, Base64.decode64(h[:salt]), h[:iter], h[:ks]/8, 'SHA256')
       iv = Base64.decode64(h[:iv])
       ct = Base64.decode64(h[:ct])
       tag = ct[ct.length-h[:ts]/8,ct.length]
@@ -132,18 +168,18 @@ module Gibberish
       if @opts[:max_iter] < c_opts[:iter]
         # Prevent DOS attacks from high PBKDF iterations
         # You an increase this by passing in opts[:max_iter]
-        raise BadArguments.new("Iteration count of #{c_opts[:iter]} exceeds the maximum of #{@opts[:max_iter]}")
+        raise CipherOptionsError.new("Iteration count of #{c_opts[:iter]} exceeds the maximum of #{@opts[:max_iter]}")
       elsif !ALLOWED_MODES.include?(c_opts[:mode])
-        raise BadArguments.new("Mode '#{c_opts[:mode]}' not supported")
+        raise CipherOptionsError.new("Mode '#{c_opts[:mode]}' not supported")
       elsif !ALLOWED_KS.include?(c_opts[:ks])
-        raise BadArguments.new("Keystrength of #{c_opts[:ks]} not supported")
+        raise CipherOptionsError.new("Keystrength of #{c_opts[:ks]} not supported")
       elsif !ALLOWED_TS.include?(c_opts[:ts])
-        raise BadArguments.new("Tag length of #{c_opts[:ts]} not supported")
+        raise CipherOptionsError.new("Tag length of #{c_opts[:ts]} not supported")
       end
     end
   end
 
-  class OpenSSLCompatAES
+  class AES::LegacyOpenSSL
 
     BUFFER_SIZE = 4096
 
