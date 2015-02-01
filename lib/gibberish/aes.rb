@@ -46,52 +46,68 @@ module Gibberish
     end
 
     def encrypt(data, opts={})
-      SJCL.encrypt(@password, data, opts)
+      cipher = SJCL.new(opts)
+      cipher.encrypt(@password, data)
     end
 
-    def decrypt(crypt, legacy_decryption=false)
+    def decrypt(crypt, opts={})
       # Allow for backwards compatibility, however
       # this would also introduce non-authenticated decryption,
       # therefore it should be used with caution
-      if legacy_decryption && crypt.index("U2F") == 0
+      if opts[:legacy_decryption] && crypt.index("U2F") == 0
         OpenSSLCompatAES.new(@password)
         return cipher.dec(crypt)
       end
-      SJCL.decrypt(@password, crypt)
+      cipher = SJCL.new(opts)
+      cipher.decrypt(@password, crypt)
     end
 
   end
+
   class SJCL
+    class BadArguments < ArgumentError; end
+    MAX_ITER = 100_000
+    ALLOWED_MODES = ['ccm', 'gcm']
+    ALLOWED_KS = [128, 192, 256]
+    ALLOWED_TS = [64, 96, 128]
     DEFAULTS = {
       v:1, iter:100_000, ks:256, ts:64,
-      mode:"gcm", adata:"", cipher:"aes"
+      mode:"gcm", adata:"", cipher:"aes", max_iter: MAX_ITER
     }
-    def self.encrypt(passcode, plaintext, opts={})
-      opts = DEFAULTS.merge(opts)
+    def initialize(opts={})
+      @opts = DEFAULTS.merge(opts)
+      check_cipher_options(@opts)
+    end
+
+    def encrypt(passcode, plaintext, c_opts={})
+      c_opts = @opts.merge(c_opts)
+      check_cipher_options(c_opts)
       salt = SecureRandom.random_bytes(8)
       iv = SecureRandom.random_bytes(12)
-      key = OpenSSL::PKCS5.pbkdf2_hmac(passcode, salt, opts[:iter], opts[:ks]/8, 'SHA256')
-      cipherMode = "#{opts[:cipher]}-#{opts[:ks]}-#{opts[:mode]}"
+      key = OpenSSL::PKCS5.pbkdf2_hmac(passcode, salt, c_opts[:iter], c_opts[:ks]/8, 'SHA256')
+      cipherMode = "#{c_opts[:cipher]}-#{c_opts[:ks]}-#{c_opts[:mode]}"
       c = OpenSSL::Cipher.new(cipherMode)
       c.encrypt
       c.key = key
       c.iv = iv
-      c.auth_data = opts[:adata] || ""
+      c.auth_data = c_opts[:adata] || ""
       ct = c.update(plaintext) + c.final
-      tag = c.auth_tag(opts[:ts]);
+      tag = c.auth_tag(c_opts[:ts]);
       ct = ct + auth_tag
       out = {
-        v: opts[:v], adata: opts[:adata], ks: opts[:ks], ct: Base64.strict_encode64(ct), ts: tag.length,
-        iter: opts[:iter], iv:  Base64.strict_encode64(iv), salt: Base64.strict_encode64(salt)
+        v: c_opts[:v], adata: c_opts[:adata], ks: c_opts[:ks], ct: Base64.strict_encode64(ct), ts: tag.length,
+        iter: c_opts[:iter], iv:  Base64.strict_encode64(iv), salt: Base64.strict_encode64(salt)
       }
       out.to_json
     end
-    def self.decrypt(passcode, h)
+    def decrypt(passcode, h)
       begin
         h = JSON.parse(h, {:symbolize_names => true})
       rescue
         raise "Unable to parse JSON of crypted text"
       end
+      h[:max_iter] = @opts[:max_iter]
+      check_cipher_options(h)
       key = OpenSSL::PKCS5.pbkdf2_hmac(passcode, Base64.decode64(h[:salt]), h[:iter], h[:ks]/8, 'SHA256')
       iv = Base64.decode64(h[:iv])
       ct = Base64.decode64(h[:ct])
@@ -110,7 +126,23 @@ module Gibberish
       c.auth_data = h[:adata] || ""
       c.update(ct) + c.final()
     end
+
+    # Assume the worst
+    def check_cipher_options(c_opts)
+      if @opts[:max_iter] < c_opts[:iter]
+        # Prevent DOS attacks from high PBKDF iterations
+        # You an increase this by passing in opts[:max_iter]
+        raise BadArguments.new("Iteration count of #{c_opts[:iter]} exceeds the maximum of #{@opts[:max_iter]}")
+      elsif !ALLOWED_MODES.include?(c_opts[:mode])
+        raise BadArguments.new("Mode '#{c_opts[:mode]}' not supported")
+      elsif !ALLOWED_KS.include?(c_opts[:ks])
+        raise BadArguments.new("Keystrength of #{c_opts[:ks]} not supported")
+      elsif !ALLOWED_TS.include?(c_opts[:ts])
+        raise BadArguments.new("Tag length of #{c_opts[:ts]} not supported")
+      end
+    end
   end
+
   class OpenSSLCompatAES
 
     BUFFER_SIZE = 4096

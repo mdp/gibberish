@@ -8,7 +8,6 @@ describe "the sjcl compatible implementation of aes" do
     before do
       @cipher = Gibberish::AES.new("s33krit")
     end
-
     it "should decrypt gcm encoded text from SJCL" do
       # With a 64bit authentication tag
       json = '{"iv":"pO1RiSKSfmlLPMIS","v":1,"iter":1000,"ks":128,"ts":64,"mode":"gcm","adata":"","cipher":"aes","salt":"BC60XoGJqnY=","ct":"Jgm8bExXvpbEDxOxFDroBuFmczMlfF4G"}'
@@ -19,6 +18,12 @@ describe "the sjcl compatible implementation of aes" do
       # With a 128bit authentication tag
       json = '{"iv":"S79wFwpjbSMz1FSB","v":1,"iter":1000,"ks":128,"ts":128,"mode":"gcm","adata":"","cipher":"aes","salt":"KhrgNREkjN4=","ct":"j8pJmmilaJ6We2fEq/NvAxka4Z70F7IEK/m9/y3hHoo="}'
       @cipher.decrypt(json).must_equal("This is a secret");
+    end
+    it "should check the options before attempting to decrypt" do
+      json = '{"iv":"S79wFwpjbSMz1FSB","v":1,"iter":1000000,"ks":128,"ts":128,"mode":"gcm","adata":"","cipher":"aes","salt":"KhrgNREkjN4=","ct":"j8pJmmilaJ6We2fEq/NvAxka4Z70F7IEK/m9/y3hHoo="}'
+      assert_raises(Gibberish::SJCL::BadArguments) {
+        @cipher.decrypt(json).must_equal("This is a secret");
+      }
     end
   end
 
