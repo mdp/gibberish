@@ -38,7 +38,7 @@ module Gibberish
     #
     # @param [String] key
     # @param [#to_s] data
-    # @param [Hash] options
+    # @param [Hash] opts
     # @option opts [Symbol] :digest (:sha1) the digest to encode with
     # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
     def self.digest(key, data, opts={})
