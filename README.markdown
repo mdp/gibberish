@@ -30,29 +30,32 @@ Ruby compiled with OpenSSL support
 
 ## AES
 
-Defaults to 256 bit CBC encryption
+AES encryption with sensible defaults:
 
-    cipher = Gibberish::AES.new("p4ssw0rd")
-    cipher.enc("Some top secret data")
-    #=> U2FsdGVkX187oKRbgDkUcMKaFfB5RsXQj/X4mc8X3lsUVgwb4+S55LQo6f6N\nIDMX
+- 100,000 iterations of PBKDF2 password hardening
+- GCM mode with authentication before decryption
+- Ability to include authenticated data
+- Compatible with SJCL, meaning all ciphertext is decryptable in JS via SJCL
 
-    cipher.dec("U2FsdGVkX187oKRbgDkUcMKaFfB5RsXQj/X4mc8X3lsUVgwb4+S55LQo6f6N\nIDMX")
-    #=> "Some top secret data"
+### Encrypting
 
-To encrypt / decrypt a file
+    cipher = Gibberish::AES.new('p4ssw0rd')
+    cipher.encrypt("some secret text")
+    #=> Outputs a string of JSON container everything that needs to be saved
 
-    cipher.encrypt_file("secret.txt", "secret.txt.enc")
+### Decrypting
 
-    cipher.decrypt_file("secret.txt.enc", "secret.txt")
+    cipher = Gibberish::AES.new('p4ssw0rd')
+    cipher.decrypt('{"iv":"saWaknqlf5aalGyU","v":1,"iter":1000,"ks":256,"ts":64,"mode":"gcm","adata":"","cipher":"aes","salt":"0GXgxJ/QAUo=","ct":"nKsmfrNBh39Rcv9KcMkIAl3sSapmou8A"}')
+    #=> "some secret text"
 
-Gibberish AES is fully compatible with default OpenSSL on the command line
+#### Previous versions and OpenSSL
 
-    echo "U2FsdGVkX187oKRbgDkUcMKaFfB5RsXQj/X4mc8X3lsUVgwb4+S55LQo6f6N\nIDMX\n" | \
-    openssl enc -d -aes-256-cbc -a -k p4ssw0rd
+Gibberish <2.0 was designed to be compatible with OpenSSL on the command line. While this is no longer the case, ciphertext from 
+versions prior to 2.0 can be decoded using the following compatibility layer.
 
-    openssl aes-256-cbc -d -in secret.txt.enc -out secret.txt -k p4ssw0rd
-
-[Find out more](http://mdp.github.com/gibberish/Gibberish/AES.html)
+    cipher = Gibberish::OpenSSLCompatAES.new('p4ssw0rd')
+    cipher.decrypt("U2FsdGVkX1/D7z2azGmmQELbMNJV/n9T/9j2iBPy2AM=")
 
 ## RSA
 
