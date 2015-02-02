@@ -6,7 +6,7 @@
   by another library. Gibberish will focus on compatibility with Javascript/Browser encryption
   - Legacy encryption/decryption has not been removed. You can still encrypt and decrypt
   older Gibberish generated AES ciphertexts, but you must call it explicitly
-* Breaking change to HMAC - Now defaults to SHA256
+* Breaking change to HMAC - User must explicitly choose a digest. No longer defaults to SHA1
 * Deprecating Ruby 1.9.3 since it's OpenSSL bindings do not allow for authenticated modes
 * Remove RSA/PGP - There are now better libraries out there for handling this.
 

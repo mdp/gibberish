@@ -70,15 +70,16 @@ versions prior to 2.0 can be decoded using the following compatibility layer.
 
 ## HMAC
 
-Defaults to SHA256
-
-    Gibberish::HMAC("password", "data")
+    Gibberish::HMAC256("password", "data")
     # => "cccf6f0334130a7010d62332c75b53e7d8cea715e52692b06e9cd41b05644be3"
 
-Other digests can be used
+Other digests are available
 
-    Gibberish::HMAC("password", "data", :digest => :sha512)
+    Gibberish::HMAC512("password", "data") # SHA512
     # => "abf85192282b501874f4803ea08672f2c9d6e656c57801023a0b1f4dd9492ba960efdb560a8618ec783327d6dc31577422651a4cf7eaf722d2caefbc04038c6e"
+
+    # or
+    Gibberish::HMAC("password", "data", :sha512)
 
 [Find out more](http://mdp.github.com/gibberish/Gibberish/HMAC.html)
 

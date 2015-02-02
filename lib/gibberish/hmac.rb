@@ -40,21 +40,38 @@ module Gibberish
     #
     # @param [String] key
     # @param [#to_s] data
+    # @param [Symbol] digest
     # @param [Hash] opts
     # @option opts [Symbol] :digest (:sha1) the digest to encode with
     # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
-    def self.digest(key, data, opts={})
+    def self.digest(key, data, digest, opts={})
       data = data.to_s
-      digest_type = opts[:digest] || :sha256
       if opts[:binary]
-        OpenSSL::HMAC.digest(DIGEST[digest_type], key, data)
+        OpenSSL::HMAC.digest(DIGEST[digest], key, data)
       else
-        OpenSSL::HMAC.hexdigest(DIGEST[digest_type], key, data)
+        OpenSSL::HMAC.hexdigest(DIGEST[digest], key, data)
       end
     end
   end
 
-  def self.HMAC(key, data, opts={})
-    Gibberish::HMAC.digest(key, data, opts)
+  def self.HMAC1(key, data)
+    Gibberish::HMAC.digest(key, data, :sha1)
   end
+
+  def self.HMAC224(key, data)
+    Gibberish::HMAC.digest(key, data, :sha224)
+  end
+
+  def self.HMAC256(key, data)
+    Gibberish::HMAC.digest(key, data, :sha256)
+  end
+
+  def self.HMAC384(key, data)
+    Gibberish::HMAC.digest(key, data, :sha384)
+  end
+
+  def self.HMAC512(key, data)
+    Gibberish::HMAC.digest(key, data, :sha512)
+  end
+
 end
