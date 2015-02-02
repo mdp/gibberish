@@ -6,11 +6,9 @@ module Gibberish
   #   - GCM mode with Authentication
   #   - 100,000 iterations of PBKDF2_HMAC for key strengthening
   #
-  # ## Compatibility with SJCL, BouncyCastle
+  # ## Compatibility with SJCL
   #   It outputs into a format that is compatible with SJCL and easy to
-  #   consume in other libraries.
-  #
-  #   TODO: Include BouncyCastle example
+  #   consume in browsers/Node.js
   #
   # ## Basic Usage
   #
@@ -42,20 +40,20 @@ module Gibberish
   #
   # ## Interoperability with SJCL's GCM mode AES
   #
-  # ### Decryption with SJCL
-  #
-  # No special settings are required. Gibberish AES is designed to be fully compatible with SJCL
+  # #### Decrypting
   #
   # ```javascript
-  # var cleartext = sjcl.decrypt('key', 'output from Gibberish AES');
+  # // In the browser
+  # var cleartext = sjcl.decrypt('key', '[output from Gibberish AES]');
   # ```
   #
-  # ### Encryption with SJCL for Gibberish
+  # #### Encrypting
   #
-  # Ruby's bindings with OpenSSL don't allow for initialization vectors of more than 3 words(12 bytes),
-  # therefore you must explicitly set the IV to 12 bytes when encrypting with SJCL.
+  # Ruby OpenSSL cannot handle an IV longer than 12 bytes, therefore we need to tell SJCL to
+  # only use a 3 word IV value. See: https://github.com/bitwiseshiftleft/sjcl/issues/180
   #
   # ```javascript
+  # // In the browser
   # var ciphertext = sjcl.encrypt('key', 'plain text', {mode: 'gcm', iv: sjcl.random.randomWords(3, 0)});
   # ```
   #
@@ -87,7 +85,6 @@ module Gibberish
     # @option opts [Symbol] :iter (100_000) number of PBKDF2 iterations to run on the password
     # @option opts [Symbol] :max_iter (100_000) maximum allow iterations, set to prevent DOS attack of someone setting a large 'iter' value in the ciphertext JSON
     # @option opts [Symbol] :ts (64) length of the authentication data hash
-    # @option opts [Symbol] :adata ("") Authenticated data to include in the ciphertext
     def initialize(password, opts={})
       @cipher = SJCL.new(password, opts)
     end
