@@ -20,6 +20,12 @@ describe "the sjcl compatible implementation of aes" do
       json = '{"iv":"S79wFwpjbSMz1FSB","v":1,"iter":1000,"ks":128,"ts":128,"mode":"gcm","adata":"","cipher":"aes","salt":"KhrgNREkjN4=","ct":"j8pJmmilaJ6We2fEq/NvAxka4Z70F7IEK/m9/y3hHoo="}'
       @cipher.decrypt(json).must_equal("This is a secret");
     end
+    it "should include the adata with the plaintext" do
+      json = '{"iv":"w9Iugnn0HztMpm+y","v":1,"iter":1000,"ks":128,"ts":64,"mode":"gcm","adata":"123abc","cipher":"aes","salt":"Sw6NOinzVZ8=","ct":"djCIRln1PbuiLEkMb2AJZdT/"}'
+      plaintext = @cipher.decrypt(json)
+      plaintext.must_equal("plain text")
+      plaintext.adata.must_equal("123abc")
+    end
     describe "exceptions" do
       it "should check the iterations length before attempting to decrypt" do
         json = '{"iv":"S79wFwpjbSMz1FSB","v":1,"iter":1000000,"ks":128,"ts":128,"mode":"gcm","adata":"","cipher":"aes","salt":"KhrgNREkjN4=","ct":"j8pJmmilaJ6We2fEq/NvAxka4Z70F7IEK/m9/y3hHoo="}'

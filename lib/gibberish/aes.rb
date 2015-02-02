@@ -105,6 +105,13 @@ module Gibberish
   class AES::SJCL
     class CipherOptionsError < ArgumentError; end
     class DecryptionError < StandardError; end
+    class Plaintext < SimpleDelegator
+      attr_reader :adata
+      def initialize(str, adata)
+        @adata = adata;
+        super(str)
+      end
+    end
     MAX_ITER = 100_000
     ALLOWED_MODES = ['ccm', 'gcm']
     ALLOWED_KS = [128, 192, 256]
@@ -139,6 +146,7 @@ module Gibberish
       }
       out.to_json
     end
+
     def decrypt(h)
       begin
         h = JSON.parse(h, {:symbolize_names => true})
@@ -167,7 +175,7 @@ module Gibberish
       rescue OpenSSL::Cipher::CipherError => e
         raise DecryptionError.new();
       end
-      return out.force_encoding('utf-8')
+      return Plaintext.new(out.force_encoding('utf-8'), h[:adata])
     end
 
     # Assume the worst
