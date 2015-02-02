@@ -1,3 +1,7 @@
+#### NOTICE: Breaking Changes in 2.0
+
+Checkout the [Changelog](CHANGELOG.mdown) for a full list of changes in 2.0
+
 # Gibberish - A ruby encryption library
 ![Travis](https://secure.travis-ci.org/mdp/gibberish.png)
 
@@ -14,10 +18,6 @@ Ruby 2.0 or later, compiled with OpenSSL support
 ## Installation
 
     gem install gibberish
-
-## NOTICE: Breaking Changes in 2.0
-
-Checkout the [Changelog](CHANGELOG.mdown) for a full list of changes in 2.0
 
 ## AES
 
