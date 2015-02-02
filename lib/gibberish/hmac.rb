@@ -1,9 +1,11 @@
 module Gibberish
-  # Easy to use HMAC, defaults to SHA1
+  # Easy to use HMAC, defaults to SHA256
   #
   # ## Example
   #
-  #     Gibberish::HMAC('key', 'data') #=> 104152c5bfdca07bc633eebd46199f0255c9f49d
+  #     Gibberish::HMAC('key', 'data')
+  #       #=> 5031fe3d989c6d1537a013fa6e739da23463fdaec3b70137d828e36ace221bd0
+  #     Gibberish::HMAC('key', 'data', :digest => :sha1) #=> 104152c5bfdca07bc633eebd46199f0255c9f49d
   #     Gibberish::HMAC('key', 'data', :digest => :sha224)
   #       #=> 19424d4210e50d7a4521b5f0d54b4b0cff3060deddccfd894fda5b3b
   #     Gibberish::HMAC('key', 'data', :digest => :sha256)
@@ -17,7 +19,7 @@ module Gibberish
   #
   # ## OpenSSL CLI Interop
   #
-  #     echo -n "stuff" | openssl dgst -sha1 -hmac 'password'
+  #     echo -n "stuff" | openssl dgst -sha256 -hmac 'password'
   #
   # is the same as
   #
@@ -43,7 +45,7 @@ module Gibberish
     # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
     def self.digest(key, data, opts={})
       data = data.to_s
-      digest_type = opts[:digest] || :sha1
+      digest_type = opts[:digest] || :sha256
       if opts[:binary]
         OpenSSL::HMAC.digest(DIGEST[digest_type], key, data)
       else

@@ -2,13 +2,14 @@ require 'spec_helper'
 
 describe "HMAC" do
 
-  it "should hopefully work" do
-    Gibberish::HMAC("password", "data").must_equal("08d13c72bed7ace5efadc09df109a78a5d713097")
+  it "should just work and default to sha256" do
+    Gibberish::HMAC("password", "data").must_equal(
+      "cccf6f0334130a7010d62332c75b53e7d8cea715e52692b06e9cd41b05644be3")
   end
 
   it "should work with OpenSSL HMAC" do
     hmac = Gibberish::HMAC("password", "data\n")
-    o_hmac = `echo "data" | openssl dgst -sha1 -hmac 'password' | sed 's/^.*= //'`
+    o_hmac = `echo "data" | openssl dgst -sha256 -hmac 'password' | sed 's/^.*= //'`
     hmac.must_equal(o_hmac.chomp)
   end
 

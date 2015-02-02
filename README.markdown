@@ -1,28 +1,16 @@
 # Gibberish - Encryption in Ruby made simple
 ![Travis](https://secure.travis-ci.org/mdp/gibberish.png)
 
-### What
-Gibberish is an opinionated cryptography library for Ruby. Its objective is easy but secure
-encryption in Ruby.
-
-### Why
-While OpenSSL is an extremely capable encryption library, it lacks a terse and clean
-interface in Ruby.
-
 ### Goals
-- This library should remain easily iteroperable with the OpenSSL command
-line interface. Each function will include documentation on how to perform
-the same routine via the command line with OpenSSL
-
+- This library should remain easily iteroperable with other libraries
 - It should default to a reasonably secure setting, e.g. 256-bit AES, or SHA1 for HMAC
 But it should allow the user to specify a stronger setting, within reason.
-
-- Procedures should be well tested and be compatible with Ruby 1.8.7 and 1.9
+- Targets more recent versions of Ruby(>=2.0) with better OpenSSL support
 
 
 ## Requirements
 
-Ruby compiled with OpenSSL support
+Ruby 2.0 or later, compiled with OpenSSL support
 
 ## Installation
 
@@ -33,7 +21,7 @@ Ruby compiled with OpenSSL support
 AES encryption with sensible defaults:
 
 - 100,000 iterations of PBKDF2 password hardening
-- GCM mode with authentication before decryption
+- GCM mode with authentication
 - Ability to include authenticated data
 - Compatible with SJCL, meaning all ciphertext is decryptable in JS via SJCL
 
@@ -71,14 +59,14 @@ versions prior to 2.0 can be decoded using the following compatibility layer.
 
 ## HMAC
 
-Defaults to 128 bit digest and SHA1
+Defaults to SHA256
 
     Gibberish::HMAC("key", "some data")
     #=> 521677c580722c5c52fa15d978e8656341c4f3c5
 
 Other digests can be used
 
-    Gibberish::HMAC("key", "some data", :digest => :sha256)
+    Gibberish::HMAC("key", "some data", :digest => :sha1)
     #=> 01add3f98ce4d49403d98362a046c6cca2c79d778426282c53e4f628f648c12b
 
 [Find out more](http://mdp.github.com/gibberish/Gibberish/HMAC.html)
