@@ -34,7 +34,7 @@ module Gibberish
   # No special settings are required. Gibberish AES is designed to be fully compatible with SJCL
   #
   # ```javascript
-  # var cleartext = SJCL.encrypt('key', 'output from Gibberish AES');
+  # var cleartext = sjcl.encrypt('key', 'output from Gibberish AES');
   # ```
   #
   # ### Encryption with SJCL for Gibberish
@@ -43,7 +43,7 @@ module Gibberish
   # therefore you must explicitly set the IV to 12 bytes when encrypting with SJCL.
   #
   # ```javascript
-  # var ciphertext = SJCL.encrypt('key', 'plain text', {mode: 'gcm', iv: SJCL.random.randomWords(3, 0)});
+  # var ciphertext = sjcl.encrypt('key', 'plain text', {mode: 'gcm', iv: sjcl.random.randomWords(3, 0)});
   # ```
   #
   # ## Backward compatibility with older pre 2.0 Gibberish
@@ -104,12 +104,13 @@ module Gibberish
 
   class AES::SJCL
     class CipherOptionsError < ArgumentError; end
+    class DecryptionError < StandardError; end
     MAX_ITER = 100_000
     ALLOWED_MODES = ['ccm', 'gcm']
     ALLOWED_KS = [128, 192, 256]
     ALLOWED_TS = [64, 96, 128]
     DEFAULTS = {
-      v:1, iter:100_000, ks:256, ts:64,
+      v:1, iter:100_000, ks:256, ts:96,
       mode:"gcm", adata:"", cipher:"aes", max_iter: MAX_ITER
     }
     def initialize(password, opts={})
@@ -129,11 +130,12 @@ module Gibberish
       c.iv = iv
       c.auth_data = adata
       ct = c.update(plaintext) + c.final
-      tag = c.auth_tag(@opts[:ts]);
-      ct = ct + auth_tag
+      tag = c.auth_tag(@opts[:ts]/8);
+      ct = ct + tag
       out = {
-        v: @opts[:v], adata: adata, ks: @opts[:ks], ct: Base64.strict_encode64(ct), ts: tag.length,
-        iter: @opts[:iter], iv:  Base64.strict_encode64(iv), salt: Base64.strict_encode64(salt)
+        v: @opts[:v], adata: adata, ks: @opts[:ks], ct: Base64.strict_encode64(ct).encode('utf-8'), ts: tag.length * 8,
+        mode: @opts[:mode], cipher: 'aes', iter: @opts[:iter], iv:  Base64.strict_encode64(iv),
+        salt: Base64.strict_encode64(salt)
       }
       out.to_json
     end
@@ -152,15 +154,20 @@ module Gibberish
       cipherMode = "#{h[:cipher]}-#{h[:ks]}-#{h[:mode]}"
       begin
         c = OpenSSL::Cipher.new(cipherMode)
-      rescue
-        raise "Unsupported Cipher Mode - #{cipherMode} - Check your version of OpenSSL"
+      rescue RuntimeError => e
+        raise "OpenSSL error when initializing: #{e.message}"
       end
       c.decrypt
       c.key = key
       c.iv = iv
       c.auth_tag = tag;
       c.auth_data = h[:adata] || ""
-      c.update(ct) + c.final()
+      begin
+        out = c.update(ct) + c.final();
+      rescue OpenSSL::Cipher::CipherError => e
+        raise DecryptionError.new();
+      end
+      return out.force_encoding('utf-8')
     end
 
     # Assume the worst
@@ -175,6 +182,8 @@ module Gibberish
         raise CipherOptionsError.new("Keystrength of #{c_opts[:ks]} not supported")
       elsif !ALLOWED_TS.include?(c_opts[:ts])
         raise CipherOptionsError.new("Tag length of #{c_opts[:ts]} not supported")
+      elsif c_opts[:iv] && Base64.decode64(c_opts[:iv]).length > 12
+        raise CipherOptionsError.new("Initialization vector's greater than 12 bytes are not supported in Ruby.")
       end
     end
   end

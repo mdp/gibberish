@@ -19,11 +19,32 @@ describe "the sjcl compatible implementation of aes" do
       json = '{"iv":"S79wFwpjbSMz1FSB","v":1,"iter":1000,"ks":128,"ts":128,"mode":"gcm","adata":"","cipher":"aes","salt":"KhrgNREkjN4=","ct":"j8pJmmilaJ6We2fEq/NvAxka4Z70F7IEK/m9/y3hHoo="}'
       @cipher.decrypt(json).must_equal("This is a secret");
     end
-    it "should check the options before attempting to decrypt" do
-      json = '{"iv":"S79wFwpjbSMz1FSB","v":1,"iter":1000000,"ks":128,"ts":128,"mode":"gcm","adata":"","cipher":"aes","salt":"KhrgNREkjN4=","ct":"j8pJmmilaJ6We2fEq/NvAxka4Z70F7IEK/m9/y3hHoo="}'
-      assert_raises(Gibberish::AES::SJCL::CipherOptionsError) {
-        @cipher.decrypt(json).must_equal("This is a secret");
-      }
+    describe "exceptions" do
+      it "should check the iterations length before attempting to decrypt" do
+        json = '{"iv":"S79wFwpjbSMz1FSB","v":1,"iter":1000000,"ks":128,"ts":128,"mode":"gcm","adata":"","cipher":"aes","salt":"KhrgNREkjN4=","ct":"j8pJmmilaJ6We2fEq/NvAxka4Z70F7IEK/m9/y3hHoo="}'
+        e = assert_raises(Gibberish::AES::SJCL::CipherOptionsError) { @cipher.decrypt(json) }
+        assert_match(/Iteration count/, e.message)
+      end
+      it "should only allow authenticated modes" do
+        json = '{"iv":"6ru5wmyPl2hfhMmb","v":1,"iter":1000,"ks":128,"ts":96,"mode":"cbc","adata":"","cipher":"aes","salt":"KhrgNREkjN4=","ct":"/0LMJz7pYDXSdFa+x3vL7uc46Nz7y5kV9DhEBQ=="}'
+        e = assert_raises(Gibberish::AES::SJCL::CipherOptionsError) { @cipher.decrypt(json) }
+        assert_equal("Mode 'cbc' not supported", e.message)
+      end
+      it "should fail gracefully when attempting to decrypt an SJCL generated ciphertext with a >12 byte IV" do
+        json = '{"iv":"fGuapJg66vk0eNNyLHUk1w==","v":1,"iter":1000,"ks":128,"ts":64,"mode":"ccm","adata":"","cipher":"aes","salt":"GRywsuW0M8E=","ct":"MUq4sLzEHtnUy2nTF8NEJQ=="}'
+        e = assert_raises(Gibberish::AES::SJCL::CipherOptionsError) { @cipher.decrypt(json) }
+        assert_match(/Initialization vector/, e.message)
+      end
+      it "should fail if the password is incorrect" do
+        json = '{"iv":"ovFbwlWH+tTHFORl","v":1,"iter":1000,"ks":128,"ts":64,"mode":"gcm","adata":"","cipher":"aes","salt":"ib5/ig2qqL8=","ct":"ruxTz/VWArVfte4qzUwF/z74"}'
+        assert_raises(Gibberish::AES::SJCL::DecryptionError) { @cipher.decrypt(json) }
+      end
+      it "should fail if the adata has be modified" do
+        json = '{"iv":"S79wFwpjbSMz1FSB","v":1,"iter":1000,"ks":128,"ts":128,"mode":"gcm","adata":"foo","cipher":"aes","salt":"KhrgNREkjN4=","ct":"j8pJmmilaJ6We2fEq/NvAxka4Z70F7IEK/m9/y3hHoo="}'
+        assert_raises(Gibberish::AES::SJCL::DecryptionError) {
+          @cipher.decrypt(json)
+        }
+      end
     end
   end
 
@@ -32,6 +53,17 @@ describe "the sjcl compatible implementation of aes" do
     before do
       @cipher = Gibberish::AES.new("s33krit")
     end
+
+    it "should encrypt text" do
+      plaintext = "This is some text, and some UTF-8 中华人民共和"
+      ciphertext = @cipher.encrypt(plaintext)
+      @cipher.decrypt(ciphertext).must_equal(plaintext);
+
+      plaintext = "בה אחד לערך איטליה, כלל אם כלכלה העריכהגירסאות. לחשבון ויקימדיה אתנולוגיה"
+      ciphertext = @cipher.encrypt(plaintext)
+      @cipher.decrypt(ciphertext).must_equal(plaintext);
+    end
+
   end
 end
 
