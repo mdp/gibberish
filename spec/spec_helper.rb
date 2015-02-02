@@ -5,3 +5,4 @@ require 'minitest/autorun'
 
 require 'gibberish'
 
+print "Ruby version #{RUBY_VERSION} - OpenSSL version: #{OpenSSL::OPENSSL_VERSION}\n"
