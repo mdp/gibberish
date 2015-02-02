@@ -68,6 +68,8 @@ versions prior to 2.0 can be decoded using the following compatibility layer.
     cipher = Gibberish::OpenSSLCompatAES.new('p4ssw0rd')
     cipher.decrypt("U2FsdGVkX1/D7z2azGmmQELbMNJV/n9T/9j2iBPy2AM=")
 
+[See the full docs](http://www.rubydoc.info/github/mdp/gibberish/Gibberish/AES)
+
 ## HMAC
 
     Gibberish::HMAC256("password", "data")
@@ -81,7 +83,7 @@ Other digests are available
     # or
     Gibberish::HMAC("password", "data", :sha512)
 
-[Find out more](http://mdp.github.com/gibberish/Gibberish/HMAC.html)
+[See the full docs](http://www.rubydoc.info/github/mdp/gibberish/Gibberish/HMAC)
 
 ## Digests
 
@@ -103,7 +105,7 @@ Other digests are available
     Gibberish::SHA512("somedata")
     #=> a053441b6de662599ecb14c580d6637dcb856a66b2a40a952d39df772e47e98ea22f9e105b31463c5cf2472feae7649464fe89d99ceb6b0bc398a6926926f416
 
-[Find out more](http://mdp.github.com/gibberish/Gibberish/Digest.html)
+[See the full docs](http://www.rubydoc.info/github/mdp/gibberish/Gibberish/Digest)
 
 ## Run the tests
 
