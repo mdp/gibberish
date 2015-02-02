@@ -1,7 +1,7 @@
 ### v2.0.0
 * Breaking changes to AES support
   - Moving to [SJCL](http://bitwiseshiftleft.github.io/sjcl/) compatible AES
-  - AES now uses only autheticated modes ("GCM" and "CCM")
+  - AES now uses only authenticated modes ("GCM" and "CCM")
   - Deprecating streaming and file AES encryption. This would be better handled
   by another library. Gibberish will focus on compatibility with Javascript/Browser encryption
   - Legacy encryption/decryption has not been removed. You can still encrypt and decrypt

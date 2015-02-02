@@ -64,7 +64,7 @@ var ciphertext = sjcl.encrypt('key', 'plain text', {mode: 'gcm', iv: sjcl.random
 
 ### Previous versions and OpenSSL
 
-Gibberish <2.0 was designed to be compatible with OpenSSL on the command line. While this is no longer the case, ciphertext from 
+Gibberish <2.0 was designed to be compatible with OpenSSL on the command line. While this is no longer the case, ciphertext from
 versions prior to 2.0 can be decoded using the following compatibility layer.
 
     cipher = Gibberish::OpenSSLCompatAES.new('p4ssw0rd')

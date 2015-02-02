@@ -18,14 +18,27 @@ module Gibberish
   #
   #     cipher = Gibberish::AES.new('p4ssw0rd')
   #     cipher.encrypt("some secret text")
-  #     #=> Outputs a JSON string containing everything that needs to be saved
+  #     #=> Outputs a JSON string containing all the necessary information
   #
   # ### Decrypting
   #
   #     cipher = Gibberish::AES.new('p4ssw0rd')
-  #     cipher.decrypt('{"iv":"saWaknqlf5aalGyU","v":1,"iter":1000,"ks":256,"ts":64,"mode":"gcm","adata":"","cipher":"aes","salt":"0GXgxJ/QAUo=","ct":"nKsmfrNBh39Rcv9KcMkIAl3sSapmou8A"}')
+  #     cipher.decrypt('{"iv":"I4XKgNfMNkYhvzXc","v":1,"iter":1000,"ks":128,"ts":64,"mode":"gcm","adata":"123abc","cipher":"aes","salt":"PJsit8L16Ug=","ct":"5sEBsHXQqLXLOjxuVQK7fGZVdrMyRGDJ"}')
   #     #=> "some secret text"
   #
+  # #### Including Authenticated data.
+  #
+  # GCM mode allows you to include "Authenticated Data" with the ciphertext, if you wish.
+  # For an overview of Authenticated Data, see this post: [http://crypto.stackexchange.com/a/15701](http://crypto.stackexchange.com/a/15701)
+  #
+  # Using AD is easy with Gibberish
+  #
+  #     cipher = Gibberish::AES.new('p4ssw0rd')
+  #     ciphertext = cipher.encrypt("Some secret data", "my authenticated data")
+  #     plaintext = cipher.decrypt(ciphertext)
+  #     #=> "some secret text"
+  #     plaintext.adata
+  #     # => "my authenticated data"
   #
   # ## Interoperability with SJCL's GCM mode AES
   #
@@ -50,7 +63,7 @@ module Gibberish
   #
   #  Gibberish was previously designed to be compatible with OpenSSL on the command line with CBC mode AES.
   #  This has been deprecated in favor of GCM mode, along with key hardening. However, you may still
-  #  decrypt and encrypt using legacy convienience methods below:
+  #  decrypt and encrypt using legacy convenience methods below:
   #
   # ### Legacy AES-256-CBC mode
   #
@@ -74,6 +87,7 @@ module Gibberish
     # @option opts [Symbol] :iter (100_000) number of PBKDF2 iterations to run on the password
     # @option opts [Symbol] :max_iter (100_000) maximum allow iterations, set to prevent DOS attack of someone setting a large 'iter' value in the ciphertext JSON
     # @option opts [Symbol] :ts (64) length of the authentication data hash
+    # @option opts [Symbol] :adata ("") Authenticated data to include in the ciphertext
     def initialize(password, opts={})
       @cipher = SJCL.new(password, opts)
     end
@@ -86,17 +100,10 @@ module Gibberish
       @cipher.encrypt(data, authenticated_data)
     end
 
-    # Returns a plaintext string
+    # Returns a Plaintext object (essentially a String with an additional 'adata' attribute)
     #
     # @param [String] ciphertext
-    def decrypt(ciphertext, opts={})
-      # Allow for backwards compatibility, however
-      # this would also introduce non-authenticated decryption,
-      # therefore it should be used with caution
-      if opts[:legacy_decryption] && ciphertext.index("U2F") == 0
-        LegacyOpenSSL.new(@password)
-        return cipher.dec(ciphertext)
-      end
+    def decrypt(ciphertext)
       @cipher.decrypt(ciphertext)
     end
 
