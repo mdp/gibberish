@@ -34,7 +34,7 @@ module Gibberish
   # No special settings are required. Gibberish AES is designed to be fully compatible with SJCL
   #
   # ```javascript
-  # var cleartext = sjcl.encrypt('key', 'output from Gibberish AES');
+  # var cleartext = sjcl.decrypt('key', 'output from Gibberish AES');
   # ```
   #
   # ### Encryption with SJCL for Gibberish

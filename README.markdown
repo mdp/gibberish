@@ -1,12 +1,11 @@
-# Gibberish - Encryption in Ruby made simple
+# Gibberish - A ruby encryption library
 ![Travis](https://secure.travis-ci.org/mdp/gibberish.png)
 
 ### Goals
-- This library should remain easily iteroperable with other libraries
-- It should default to a reasonably secure setting, e.g. 256-bit AES, or SHA1 for HMAC
-But it should allow the user to specify a stronger setting, within reason.
+- AES encryption should have sensible defaults
+- AES should be interoperable with SJCL for browser based decryption/encryption
+- Simple API for HMAC/Digests
 - Targets more recent versions of Ruby(>=2.0) with better OpenSSL support
-
 
 ## Requirements
 
@@ -29,7 +28,8 @@ AES encryption with sensible defaults:
 
     cipher = Gibberish::AES.new('p4ssw0rd')
     cipher.encrypt("some secret text")
-    #=> Outputs a string of JSON container everything that needs to be saved
+    #=> Outputs a string of JSON containing everything that needs to be saved for future decryption
+    # Example: '{"iv":"saWaknqlf5aalGyU","v":1,"iter":1000,"ks":256,"ts":64,"mode":"gcm","adata":"","cipher":"aes","salt":"0GXgxJ/QAUo=","ct":"nKsmfrNBh39Rcv9KcMkIAl3sSapmou8A"}'
 
 ### Decrypting
 
@@ -37,7 +37,21 @@ AES encryption with sensible defaults:
     cipher.decrypt('{"iv":"saWaknqlf5aalGyU","v":1,"iter":1000,"ks":256,"ts":64,"mode":"gcm","adata":"","cipher":"aes","salt":"0GXgxJ/QAUo=","ct":"nKsmfrNBh39Rcv9KcMkIAl3sSapmou8A"}')
     #=> "some secret text"
 
-#### Previous versions and OpenSSL
+### Interoperability with SJCL (Javascript - Browser/Node.js)
+
+#### Encrypting
+
+```javascript
+var ciphertext = sjcl.encrypt('key', 'plain text', {mode: 'gcm', iv: sjcl.random.randomWords(3, 0)});
+```
+
+#### Decrypting
+
+```javascript
+var cleartext = sjcl.decrypt('key', '[output from Gibberish AES]');
+```
+
+### Previous versions and OpenSSL
 
 Gibberish <2.0 was designed to be compatible with OpenSSL on the command line. While this is no longer the case, ciphertext from 
 versions prior to 2.0 can be decoded using the following compatibility layer.
@@ -45,29 +59,17 @@ versions prior to 2.0 can be decoded using the following compatibility layer.
     cipher = Gibberish::OpenSSLCompatAES.new('p4ssw0rd')
     cipher.decrypt("U2FsdGVkX1/D7z2azGmmQELbMNJV/n9T/9j2iBPy2AM=")
 
-## RSA
-
-    k = Gibberish::RSA.generate_keypair(1024)
-    cipher = Gibberish::RSA.new(k.public_key)
-    enc = cipher.encrypt("Some data")
-    # Defaults to Base64 output
-    #=> "JKm98wKyJljqmpx7kP8ZsdeXiShllEMcRHVnjUjc4ecyYK/doKAkVTLho1Gp\ng697qrljyClF0AcIH+XZmeF/TrqYUuCEUyhOD6OL1bs5dn8vFQefS5KdaC5Y\ndLADvh3mSfE/w/gs4vaf/OtbZNBeSl6ROCZasWTfRewp4n1RDmE=\n"
-    cipher = Gibberish::RSA.new(k.private_key)
-    dec = cipher.decrypt(enc)
-
-[Find out more](http://mdp.github.com/gibberish/Gibberish/RSA.html)
-
 ## HMAC
 
 Defaults to SHA256
 
-    Gibberish::HMAC("key", "some data")
-    #=> 521677c580722c5c52fa15d978e8656341c4f3c5
+    Gibberish::HMAC("password", "data")
+    # => "cccf6f0334130a7010d62332c75b53e7d8cea715e52692b06e9cd41b05644be3"
 
 Other digests can be used
 
-    Gibberish::HMAC("key", "some data", :digest => :sha1)
-    #=> 01add3f98ce4d49403d98362a046c6cca2c79d778426282c53e4f628f648c12b
+    Gibberish::HMAC("password", "data", :digest => :sha512)
+    # => "abf85192282b501874f4803ea08672f2c9d6e656c57801023a0b1f4dd9492ba960efdb560a8618ec783327d6dc31577422651a4cf7eaf722d2caefbc04038c6e"
 
 [Find out more](http://mdp.github.com/gibberish/Gibberish/HMAC.html)
 
@@ -97,9 +99,7 @@ Other digests can be used
 
     git clone https://github.com/mdp/gibberish.git
     cd gibberish
-    bundle install
-    rake test
+    make
 
 ## TODO
 
-- Cover OpenSSL exceptions with more reasonable and easier to understand exceptions.
