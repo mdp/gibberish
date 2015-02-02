@@ -37,17 +37,22 @@ AES encryption with sensible defaults:
     cipher.decrypt('{"iv":"saWaknqlf5aalGyU","v":1,"iter":1000,"ks":256,"ts":64,"mode":"gcm","adata":"","cipher":"aes","salt":"0GXgxJ/QAUo=","ct":"nKsmfrNBh39Rcv9KcMkIAl3sSapmou8A"}')
     #=> "some secret text"
 
-### Interoperability with SJCL (Javascript - Browser/Node.js)
+### Interoperability with SJCL (JavaScript - Browser/Node.js)
+
+AES ciphertext from Gibberish is compatible with [SJCL](http://bitwiseshiftleft.github.io/sjcl/), a JavaScript library which
+works in the browser and Node.js
 
 #### Encrypting
 
 ```javascript
+// In the browser
 var ciphertext = sjcl.encrypt('key', 'plain text', {mode: 'gcm', iv: sjcl.random.randomWords(3, 0)});
 ```
 
 #### Decrypting
 
 ```javascript
+// In the browser
 var cleartext = sjcl.decrypt('key', '[output from Gibberish AES]');
 ```
 
