@@ -46,18 +46,20 @@ AES encryption with sensible defaults:
 AES ciphertext from Gibberish is compatible with [SJCL](http://bitwiseshiftleft.github.io/sjcl/), a JavaScript library which
 works in the browser and Node.js
 
-#### Encrypting
-
-```javascript
-// In the browser
-var ciphertext = sjcl.encrypt('key', 'plain text', {mode: 'gcm', iv: sjcl.random.randomWords(3, 0)});
-```
-
 #### Decrypting
 
 ```javascript
 // In the browser
 var cleartext = sjcl.decrypt('key', '[output from Gibberish AES]');
+```
+
+#### Encrypting
+
+```javascript
+// In the browser
+// Ruby OpenSSL cannot handle an IV longer than 12 bytes, therefore we need to tell SJCL to
+// only use a 3 word IV value. See: https://github.com/bitwiseshiftleft/sjcl/issues/180
+var ciphertext = sjcl.encrypt('key', 'plain text', {mode: 'gcm', iv: sjcl.random.randomWords(3, 0)});
 ```
 
 ### Previous versions and OpenSSL
