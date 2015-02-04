@@ -78,6 +78,8 @@ describe "the sjcl compatible implementation of aes" do
       ciphertext = JSON.parse(@cipher.encrypt(plaintext))
       ciphertext["iter"].must_equal(100_000)
       ciphertext["v"].must_equal(1)
+      ciphertext["ks"].must_equal(256)
+      ciphertext["ts"].must_equal(96)
       ciphertext["mode"].must_equal("gcm")
       ciphertext["cipher"].must_equal("aes")
     end
