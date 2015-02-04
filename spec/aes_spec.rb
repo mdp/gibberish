@@ -57,18 +57,29 @@ describe "the sjcl compatible implementation of aes" do
 
   describe "encryption" do
 
-    before do
-      @cipher = Gibberish::AES.new("s33krit")
-    end
-
     it "should encrypt text" do
+      @cipher = Gibberish::AES.new("s33krit")
       plaintext = "This is some text, and some UTF-8 中华人民共和"
       ciphertext = @cipher.encrypt(plaintext)
       @cipher.decrypt(ciphertext).must_equal(plaintext);
+    end
 
-      plaintext = "בה אחד לערך איטליה, כלל אם כלכלה העריכהגירסאות. לחשבון ויקימדיה אתנולוגיה"
+    it "should allow users to override the number of iterations" do
+      @cipher = Gibberish::AES.new("s33krit", {iter: 10_000})
+      plaintext = "This is some text"
       ciphertext = @cipher.encrypt(plaintext)
+      JSON.parse(ciphertext)["iter"].must_equal(10_000)
       @cipher.decrypt(ciphertext).must_equal(plaintext);
+    end
+
+    it "should set the correct JSON attributes in the ciphertext" do
+      @cipher = Gibberish::AES.new("s33krit")
+      plaintext = "This is some text"
+      ciphertext = JSON.parse(@cipher.encrypt(plaintext))
+      ciphertext["iter"].must_equal(100_000)
+      ciphertext["v"].must_equal(1)
+      ciphertext["mode"].must_equal("gcm")
+      ciphertext["cipher"].must_equal("aes")
     end
 
   end

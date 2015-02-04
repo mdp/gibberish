@@ -32,8 +32,11 @@ AES encryption with sensible defaults:
 
     cipher = Gibberish::AES.new('p4ssw0rd')
     cipher.encrypt("some secret text")
-    # => Outputs a string of JSON containing everything that needs to be saved for future decryption
-    # Example: '{"iv":"saWaknqlf5aalGyU","v":1,"iter":1000,"ks":256,"ts":64,"mode":"gcm","adata":"","cipher":"aes","salt":"0GXgxJ/QAUo=","ct":"nKsmfrNBh39Rcv9KcMkIAl3sSapmou8A"}'
+    # => Outputs a JSON string containing everything that needs to be saved for future decryption
+    # Example:
+    # '{"iv":"saWaknqlf5aalGyU","v":1,"iter":1000,"ks":256,"ts":64,"mode":"gcm",
+    # "adata":"","cipher":"aes","salt":"0GXgxJ/QAUo=",
+    # "ct":"nKsmfrNBh39Rcv9KcMkIAl3sSapmou8A"}'
 
 ### Decrypting
 
