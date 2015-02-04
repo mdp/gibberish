@@ -4,6 +4,7 @@
 *NOTICE: Breaking Changes in 2.0*
 
 Checkout the [Changelog](CHANGELOG.mdown) for a full list of changes in 2.0
+Any pull request/work on <2.0 will remain in the [v1 branch](/mdp/gibberish/tree/v1).
 
 ## Goals
 - AES encryption should have sensible defaults
@@ -26,7 +27,7 @@ AES encryption with sensible defaults:
 - 100,000 iterations of PBKDF2 password hardening
 - GCM mode with authentication
 - Ability to include authenticated data
-- Compatible with SJCL, meaning all ciphertext is decryptable in JS via SJCL
+- Compatible with [SJCL](http://bitwiseshiftleft.github.io/sjcl/), meaning all ciphertext is decryptable in JS via [SJCL](http://bitwiseshiftleft.github.io/sjcl/)
 
 ### Encrypting
 
