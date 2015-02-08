@@ -7,10 +7,11 @@ Gem::Specification.new do |s|
   s.version     = Gibberish::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Mark Percival"]
-  s.email       = ["mark@markpercival.us"]
+  s.email       = ["m@mdp.im"]
   s.homepage    = "http://github.com/mdp/gibberish"
   s.summary     = %q{An opinionated ruby encryption library}
-  s.description = %q{Supports OpenSSL compatible AES, HMAC, and RSA encryption}
+  s.description = %q{Supports SJCL compatible AES encryption, HMAC, and Digests}
+  s.license = "MIT"
 
   s.rubyforge_project = "gibberish"
 

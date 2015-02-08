@@ -34,9 +34,8 @@ module Gibberish
     #
     # Shorcut alias: Gibberish::SHA1(data)
     #
-    # @param [String] key
     # @param [#to_s] data
-    # @param [Hash] options
+    # @param [Hash] opts
     # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
     def self.sha1(data, opts={})
       data = data.to_s
@@ -51,9 +50,8 @@ module Gibberish
     #
     # Shorcut alias: Gibberish::SHA224(data)
     #
-    # @param [String] key
     # @param [#to_s] data
-    # @param [Hash] options
+    # @param [Hash] opts
     # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
     def self.sha224(data, opts={})
       data = data.to_s
@@ -68,9 +66,8 @@ module Gibberish
     #
     # Shorcut alias: Gibberish::SHA256(data)
     #
-    # @param [String] key
     # @param [#to_s] data
-    # @param [Hash] options
+    # @param [Hash] opts
     # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
     def self.sha256(data, opts={})
       data = data.to_s
@@ -85,9 +82,8 @@ module Gibberish
     #
     # Shorcut alias: Gibberish::SHA384(data)
     #
-    # @param [String] key
     # @param [#to_s] data
-    # @param [Hash] options
+    # @param [Hash] opts
     # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
     def self.sha384(data, opts={})
       data = data.to_s
@@ -102,9 +98,8 @@ module Gibberish
     #
     # Shorcut alias: Gibberish::SHA512(data)
     #
-    # @param [String] key
     # @param [#to_s] data
-    # @param [Hash] options
+    # @param [Hash] opts
     # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
     def self.sha512(data, opts={})
       data = data.to_s
@@ -119,9 +114,8 @@ module Gibberish
     #
     # Shorcut alias: Gibberish::MD5(data)
     #
-    # @param [String] key
     # @param [#to_s] data
-    # @param [Hash] options
+    # @param [Hash] opts
     # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
     def self.md5(data, opts={})
       data = data.to_s

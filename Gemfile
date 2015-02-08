@@ -1,5 +1,8 @@
 source "http://rubygems.org"
 gemspec
-gem 'minitest'
-gem 'mini_shoulda'
-gem 'rake'
+group :development, :test do
+    gem 'yard'
+    gem 'minitest'
+    gem 'mini_shoulda'
+    gem 'rake'
+end

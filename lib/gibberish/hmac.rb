@@ -1,9 +1,11 @@
 module Gibberish
-  # Easy to use HMAC, defaults to SHA1
+  # Easy to use HMAC, defaults to SHA256
   #
   # ## Example
   #
-  #     Gibberish::HMAC('key', 'data') #=> 104152c5bfdca07bc633eebd46199f0255c9f49d
+  #     Gibberish::HMAC('key', 'data')
+  #       #=> 5031fe3d989c6d1537a013fa6e739da23463fdaec3b70137d828e36ace221bd0
+  #     Gibberish::HMAC('key', 'data', :digest => :sha1) #=> 104152c5bfdca07bc633eebd46199f0255c9f49d
   #     Gibberish::HMAC('key', 'data', :digest => :sha224)
   #       #=> 19424d4210e50d7a4521b5f0d54b4b0cff3060deddccfd894fda5b3b
   #     Gibberish::HMAC('key', 'data', :digest => :sha256)
@@ -17,7 +19,7 @@ module Gibberish
   #
   # ## OpenSSL CLI Interop
   #
-  #     echo -n "stuff" | openssl dgst -sha1 -hmac 'password'
+  #     echo -n "stuff" | openssl dgst -sha256 -hmac 'password'
   #
   # is the same as
   #
@@ -38,21 +40,38 @@ module Gibberish
     #
     # @param [String] key
     # @param [#to_s] data
-    # @param [Hash] options
+    # @param [Symbol] digest
+    # @param [Hash] opts
     # @option opts [Symbol] :digest (:sha1) the digest to encode with
     # @option opts [Boolean] :binary (false) encode the data in binary, not Base64
-    def self.digest(key, data, opts={})
+    def self.digest(key, data, digest, opts={})
       data = data.to_s
-      digest_type = opts[:digest] || :sha1
       if opts[:binary]
-        OpenSSL::HMAC.digest(DIGEST[digest_type], key, data)
+        OpenSSL::HMAC.digest(DIGEST[digest], key, data)
       else
-        OpenSSL::HMAC.hexdigest(DIGEST[digest_type], key, data)
+        OpenSSL::HMAC.hexdigest(DIGEST[digest], key, data)
       end
     end
   end
 
-  def self.HMAC(key, data, opts={})
-    Gibberish::HMAC.digest(key, data, opts)
+  def self.HMAC1(key, data)
+    Gibberish::HMAC.digest(key, data, :sha1)
   end
+
+  def self.HMAC224(key, data)
+    Gibberish::HMAC.digest(key, data, :sha224)
+  end
+
+  def self.HMAC256(key, data)
+    Gibberish::HMAC.digest(key, data, :sha256)
+  end
+
+  def self.HMAC384(key, data)
+    Gibberish::HMAC.digest(key, data, :sha384)
+  end
+
+  def self.HMAC512(key, data)
+    Gibberish::HMAC.digest(key, data, :sha512)
+  end
+
 end
