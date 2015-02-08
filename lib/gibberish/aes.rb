@@ -60,8 +60,10 @@ module Gibberish
   # ## Backward compatibility with older pre 2.0 Gibberish
   #
   #  Gibberish was previously designed to be compatible with OpenSSL on the command line with CBC mode AES.
-  #  This has been deprecated in favor of GCM mode, along with key hardening. However, you may still
+  #  This has been deprecated in favor of GCM mode. However, you may still
   #  decrypt and encrypt using legacy convenience methods below:
+  #
+  #  (Note: OpenSSL "enc" uses a non-standard file format which lacks [key stretching](http://en.wikipedia.org/wiki/Key_stretching), this means less secure passwords are more susceptible to brute forcing.)
   #
   # ### AES-256-CBC mode
   #
