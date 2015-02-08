@@ -52,6 +52,14 @@ works in the browser and Node.js
 
 [See the full docs](http://www.rubydoc.info/github/mdp/gibberish/Gibberish/AES) for information on SJCL interoperability.
 
+### Gibberish 1.x Encryption (CBC)
+
+Prior to Gibberish 2.0, the default encryption mode was CBC. You can still access this
+by calling it explicitly:
+
+    cipher = Gibberish::AES::CBC.new('p4ssw0rd')
+    cipher.encrypt("Some secret text")
+
 ## HMAC
 
     Gibberish::HMAC256("password", "data")

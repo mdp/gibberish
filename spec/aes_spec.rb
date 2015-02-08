@@ -90,7 +90,7 @@ end
 describe "the openssl command line compatible aes cipher" do
 
   before do
-    @cipher = Gibberish::AES::LegacyOpenSSL.new("password")
+    @cipher = Gibberish::AES::CBC.new("password")
   end
 
   it "should encrypt text and be compatible with OpenSSL CLI" do

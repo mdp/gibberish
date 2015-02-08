@@ -63,9 +63,9 @@ module Gibberish
   #  This has been deprecated in favor of GCM mode, along with key hardening. However, you may still
   #  decrypt and encrypt using legacy convenience methods below:
   #
-  # ### Legacy AES-256-CBC mode
+  # ### AES-256-CBC mode
   #
-  #     cipher = Gibberish::AES::LegacyOpenSSL.new('p4ssw0rd')
+  #     cipher = Gibberish::AES::CBC.new('p4ssw0rd')
   #     cipher_text = cipher.encrypt("some secret text")
   #     # => U2FsdGVkX1/D7z2azGmmQELbMNJV/n9T/9j2iBPy2AM=
   #
@@ -200,7 +200,7 @@ module Gibberish
     end
   end
 
-  class AES::LegacyOpenSSL
+  class AES::CBC
 
     BUFFER_SIZE = 4096
 
