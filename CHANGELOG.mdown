@@ -1,10 +1,10 @@
 ### v2.0.0
-* Breaking changes to AES support
+* Breaking changes to default AES mode
   - Moving to [SJCL](http://bitwiseshiftleft.github.io/sjcl/) compatible AES
   - AES now uses only authenticated modes ("GCM" and "CCM")
   - Deprecating streaming and file AES encryption. This would be better handled
     by another library. Gibberish will focus on compatibility with Javascript/Browser encryption.
-  - CBC encryption/decryption is still available. You can still encrypt and decrypt
+  - 1.x CBC encryption/decryption is still available. You can still encrypt and decrypt
     older Gibberish generated AES ciphertexts, but you must call it explicitly
 * Breaking change to HMAC - User must explicitly choose a digest. No longer defaults to SHA1
 * Deprecating Ruby 1.9.3 since its OpenSSL bindings do not allow for authenticated modes
