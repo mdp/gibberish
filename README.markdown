@@ -106,3 +106,9 @@ by calling it explicitly:
     cd gibberish
     make
 
+### Benchmarking AES with PBKDF2
+
+    make benchmark
+    # Change the PBKDF2 iterations
+    ITER=10000 make benchmark
+
