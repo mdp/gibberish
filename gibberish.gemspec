@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/mdp/gibberish"
   s.summary     = %q{An opinionated ruby encryption library}
   s.description = %q{Supports SJCL compatible AES encryption, HMAC, and Digests}
+  s.required_ruby_version = '>= 2.0.0'
   s.license = "MIT"
 
   s.rubyforge_project = "gibberish"
