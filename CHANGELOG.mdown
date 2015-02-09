@@ -8,8 +8,6 @@
     older Gibberish generated AES ciphertexts, but you must call it explicitly
 * Breaking change to HMAC - User must explicitly choose a digest. No longer defaults to SHA1
 * Deprecating Ruby 1.9.3 since its OpenSSL bindings do not allow for authenticated modes
-* Remove RSA/PGP - There's alot of complexity here. This would better be handled by
-  another library.
 
 ### v1.4.0
 * Fix deprecation. Support for 1.8.7 is deprecated, so bumping minor rev [PR #15](https://github.com/mdp/gibberish/pull/15)
