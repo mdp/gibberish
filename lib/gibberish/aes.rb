@@ -1,4 +1,5 @@
 require 'json'
+require 'delegate'
 
 module Gibberish
   # # Handles AES encryption and decryption with some sensible defaults
@@ -77,7 +78,6 @@ module Gibberish
   #     echo "U2FsdGVkX1/D7z2azGmmQELbMNJV/n9T/9j2iBPy2AM=\n" | openssl enc -d -aes-256-cbc -a -k p4ssw0rd
   #
   class AES
-
     # Returns the AES object
     #
     # @param [String] password
@@ -118,6 +118,7 @@ module Gibberish
         super(str)
       end
     end
+
     MAX_ITER = 100_000
     ALLOWED_MODES = ['ccm', 'gcm']
     ALLOWED_KS = [128, 192, 256]
