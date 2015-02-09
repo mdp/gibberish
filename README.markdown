@@ -1,5 +1,5 @@
 # Gibberish - A ruby encryption library
-![[Travis](https://secure.travis-ci.org/mdp/gibberish.png)](https://travis-ci.org/mdp/gibberish)
+[![Travis](https://secure.travis-ci.org/mdp/gibberish.png)](https://travis-ci.org/mdp/gibberish)
 
 *NOTICE: Breaking Changes in 2.0*
 
