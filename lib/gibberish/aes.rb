@@ -1,5 +1,6 @@
 require 'json'
 require 'delegate'
+require 'securerandom'
 
 module Gibberish
   # # Handles AES encryption and decryption with some sensible defaults

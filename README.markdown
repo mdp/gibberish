@@ -34,14 +34,13 @@ AES encryption with sensible defaults:
     cipher.encrypt("some secret text")
     # => Outputs a JSON string containing everything that needs to be saved for future decryption
     # Example:
-    # '{"iv":"saWaknqlf5aalGyU","v":1,"iter":1000,"ks":256,"ts":64,"mode":"gcm",
-    # "adata":"","cipher":"aes","salt":"0GXgxJ/QAUo=",
-    # "ct":"nKsmfrNBh39Rcv9KcMkIAl3sSapmou8A"}'
+    # '{"v":1,"adata":"","ks":256,"ct":"ay2varjSFUMUmtvZeh9755GVyCkWHG0/BglJLQ==","ts":96,"mode":"gcm",
+    # "cipher":"aes","iter":100000,"iv":"K4ZShCQGL3UZr78y","salt":"diDUzbc9Euo="}'
 
 ### Decrypting
 
     cipher = Gibberish::AES.new('p4ssw0rd')
-    cipher.decrypt('{"iv":"saWaknqlf5aalGyU","v":1,"iter":1000,"ks":256,"ts":64,"mode":"gcm","adata":"","cipher":"aes","salt":"0GXgxJ/QAUo=","ct":"nKsmfrNBh39Rcv9KcMkIAl3sSapmou8A"}')
+    cipher.decrypt('{"v":1,"adata":"","ks":256,"ct":"ay2varjSFUMUmtvZeh9755GVyCkWHG0/BglJLQ==","ts":96,"mode":"gcm","cipher":"aes","iter":100000,"iv":"K4ZShCQGL3UZr78y","salt":"diDUzbc9Euo="}')
     # => "some secret text"
 
 ### Interoperability with SJCL (JavaScript - Browser/Node.js)
