@@ -9,6 +9,9 @@ I can't recommend it enough.
 
 If youre looking for a Ruby version, give [RbNaCl](https://github.com/cryptosphere/rbnacl) a shot.
 
+I'll continue to keep Gibberish up to date, but if you're choosing an encryption library today, I'd recommend
+taking a serious look at LibSodium for all your encryption needs.
+
 # Gibberish - A ruby encryption library
 [![Travis](https://secure.travis-ci.org/mdp/gibberish.png)](https://travis-ci.org/mdp/gibberish)
 
