@@ -1,3 +1,14 @@
+## Newer alternatives
+
+Gibberish was first put together in 2011. It's now 2015 and probably a good time to look at
+what alternatives are available.
+
+LibSodium is shaping up to be a clear winner. It supports sensible defaults, symmetric and asymmetric
+encryptions and has support in nearly [every major language](http://doc.libsodium.org/bindings_for_other_languages/index.html).
+I can't recommend it enough.
+
+If youre looking for a Ruby version, give [RbNaCl](https://github.com/cryptosphere/rbnacl) a shot.
+
 # Gibberish - A ruby encryption library
 [![Travis](https://secure.travis-ci.org/mdp/gibberish.png)](https://travis-ci.org/mdp/gibberish)
 
@@ -86,18 +97,6 @@ by calling it explicitly:
     #=> a053441b6de662599ecb14c580d6637dcb856a66b2a40a952d39df772e47e98ea22f9e105b31463c5cf2472feae7649464fe89d99ceb6b0bc398a6926926f416
 
 [See the full docs](http://www.rubydoc.info/github/mdp/gibberish/Gibberish/Digest)
-
-## RSA
-
-    k = Gibberish::RSA.generate_keypair(2048)
-    cipher = Gibberish::RSA.new(k.public_key)
-    enc = cipher.encrypt("Some data")
-    # Defaults to Base64 output
-    #=> "JKm98wKyJljqmpx7kP8ZsdeXiShllEMcRHVnjUjc4ecyYK/doKAkVTLho1Gp\ng697qrljyClF0AcIH+XZmeF/TrqYUuCEUyhOD6OL1bs5dn8vFQefS5KdaC5Y\ndLADvh3mSfE/w/gs4vaf/OtbZNBeSl6ROCZasWTfRewp4n1RDmE=\n"
-    cipher = Gibberish::RSA.new(k.private_key)
-    dec = cipher.decrypt(enc)
-
-[See the full docs](http://mdp.github.com/gibberish/Gibberish/RSA.html)
 
 ## Run the tests
 
