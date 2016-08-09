@@ -158,8 +158,8 @@ module Gibberish
     def decrypt(h)
       begin
         h = JSON.parse(h, {:symbolize_names => true})
-      rescue
-        raise "Unable to parse JSON of crypted text"
+      rescue => e
+        raise "Unable to parse JSON of crypted text. #{e.inspect}"
       end
       check_cipher_options(h)
       key = OpenSSL::PKCS5.pbkdf2_hmac(@password, Base64.decode64(h[:salt]), h[:iter], h[:ks]/8, 'SHA256')
@@ -171,7 +171,7 @@ module Gibberish
       begin
         c = OpenSSL::Cipher.new(cipherMode)
       rescue RuntimeError => e
-        raise "OpenSSL error when initializing: #{e.message}"
+        raise "OpenSSL error when initializing: #{e.inspect}"
       end
       c.decrypt
       c.key = key
@@ -181,7 +181,7 @@ module Gibberish
       begin
         out = c.update(ct) + c.final();
       rescue OpenSSL::Cipher::CipherError => e
-        raise DecryptionError.new();
+        raise DecryptionError.new(e.inspect);
       end
       return Plaintext.new(out.force_encoding('utf-8'), h[:adata])
     end
