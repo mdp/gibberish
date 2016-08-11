@@ -1,3 +1,6 @@
+### v2.1.0
+* Improve exception handling [PR#25](https://github.com/mdp/gibberish/pull/25)
+
 ### v2.0.0
 * Breaking changes to default AES mode
   - Moving to [SJCL](http://bitwiseshiftleft.github.io/sjcl/) compatible AES
