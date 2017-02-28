@@ -42,7 +42,7 @@ module Gibberish
 
       def initialize(key)
         @key = key
-        @cipher =  OpenSSL::Cipher::Cipher.new('aes-256-cbc')
+        @cipher =  OpenSSL::Cipher.new('aes-256-cbc')
       end
 
       def public_key
