@@ -145,7 +145,11 @@ module Gibberish
       c.iv = iv
       c.auth_data = adata
       ct = c.update(plaintext) + c.final
-      tag = c.auth_tag(@opts[:ts]/8);
+      if defined?(JRUBY_VERSION)
+        tag = c.auth_tag = @opts[:ts]/8
+      else
+        tag = c.auth_tag(@opts[:ts]/8)
+      end
       ct = ct + tag
       out = {
         v: @opts[:v], adata: adata, ks: @opts[:ks], ct: Base64.strict_encode64(ct).encode('utf-8'), ts: tag.length * 8,
