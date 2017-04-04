@@ -305,7 +305,7 @@ module Gibberish
 
     def setup_cipher(method, salt)
       cipher.send(method)
-      cipher.pkcs5_keyivgen(password, salt, 1)
+      cipher.pkcs5_keyivgen(password, salt, 1000)
     end
 
     def copy_stream(in_stream, out_stream)
