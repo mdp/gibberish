@@ -219,7 +219,7 @@ module Gibberish
       @password = password
       @size = size
       @mode = mode
-      @cipher = OpenSSL::Cipher::Cipher.new("aes-#{size}-#{mode}")
+      @cipher = OpenSSL::Cipher.new("aes-#{size}-#{mode}")
     end
 
     def encrypt(data, opts={})
