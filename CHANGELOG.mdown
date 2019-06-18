@@ -1,3 +1,6 @@
+### v2.1.1
+* Fix deprection warning on OpenSSL::Cipher [PR#27](https://github.com/mdp/gibberish/pull/27)
+
 ### v2.1.0
 * Improve exception handling [PR#25](https://github.com/mdp/gibberish/pull/25)
 
