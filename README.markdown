@@ -1,5 +1,5 @@
 # Gibberish - A ruby encryption library
-[![Travis](https://secure.travis-ci.org/mdp/gibberish.png)](https://travis-ci.org/mdp/gibberish)
+[![Travis](https://travis-ci.org/mdp/gibberish.svg?branch=master)](https://travis-ci.org/mdp/gibberish)
 
 **Note: It's 2017 and if you're looking for a modern and actively maintained Ruby encryption library you should do yourself a favor and check out [RbNaCl](https://github.com/cryptosphere/rbnacl). Gibberish was started in 2011 when encryption on Ruby was not a trivial matter, however thanks to projects like [NaCl](https://nacl.cr.yp.to/) and [LibSodium](https://download.libsodium.org/doc/) that's no longer the case.**
 
